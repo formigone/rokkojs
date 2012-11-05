@@ -8,6 +8,10 @@ Features
  2D games
  3D games
 
+UML
+
+![Main engine structure and relationship](./doc/rokkojs-uml.svg)
+
 
  Copyright 2012 Rodrigo Silveira. All rights reserved.
 -------------------------------------------------------

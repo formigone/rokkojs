@@ -10,7 +10,7 @@ Features
 
 UML
 
-![Main engine structure and relationship](./doc/rokkojs-uml.svg)
+![Main engine structure and relationship](/doc/rokkojs-uml.svg)
 
 
  Copyright 2012 Rodrigo Silveira. All rights reserved.

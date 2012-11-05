@@ -19,5 +19,4 @@ UML
 
 Copyright 2012 Rodrigo Silveira. All rights reserved.
 -----------------------------------------------------
-[http://www.rodrigo-silveira.com](http://www.rodrigo-silveira.com)
-[http://www.formigone.com](http://www.formigone.com)
+[http://www.rodrigo-silveira.com](http://www.rodrigo-silveira.com) |  [http://www.formigone.com](http://www.formigone.com)

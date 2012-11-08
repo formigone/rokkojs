@@ -3,6 +3,6 @@
   "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to='rokkojs'>
 	<inherits name='com.google.gwt.user.User' />
-	<entry-point class='com.formigone.rokkojs.client.RokkoJS' />
+	<entry-point class='com.formigone.rokkojs.client.Main' />
 	<source path='client' />
 </module>

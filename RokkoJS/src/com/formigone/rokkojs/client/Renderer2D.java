@@ -17,7 +17,7 @@ public class Renderer2D implements Renderer {
 		canvas = Canvas.createIfSupported();
 		canvas.setCoordinateSpaceWidth(width);
 		canvas.setCoordinateSpaceHeight(height);
-		
+
 		context = this.canvas.getContext2d();
 	}
 
@@ -25,7 +25,7 @@ public class Renderer2D implements Renderer {
 		return this.canvas;
 	}
 
-	public void render2D(Drawable2D drawable) {
+	public void render2D(Movable2D drawable) {
 		System.out.println("Rendering with my Renderer2D");
 		context.clearRect(0, 0, width, height);
 		context.fillRect(drawable.getX(), drawable.getY(), drawable.getWidth(), drawable.getHeight());
@@ -33,7 +33,7 @@ public class Renderer2D implements Renderer {
 
 	@Override
 	public void render(Drawable drawable) {
-		this.render2D((Drawable2D)drawable);
+		this.render2D((Movable2D)drawable);
 	}
 
 }

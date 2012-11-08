@@ -1,8 +1,6 @@
 package com.formigone.rokkojs.client;
 
-import com.google.gwt.core.shared.GWT;
-
-public class Square extends Drawable2D {
+public class Square extends Movable2D {
 
 	public Square(int x, int y, int width, int height) {
 		super(x, y, width, height);

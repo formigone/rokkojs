@@ -3,11 +3,11 @@ package com.formigone.rokkojs.client;
 import com.google.gwt.core.client.GWT;
 
 public class Scene {
-	private Drawable drawables;
+	private Drawable drawable;
 	private Renderer renderer;
 
 	public void setDrawables(Drawable drawables) {
-		this.drawables = drawables;
+		this.drawable = drawables;
 	}
 
 	public void setRenderer(Renderer renderer) {
@@ -16,5 +16,6 @@ public class Scene {
 
 	public void render() {
 		GWT.log("Rendering scene");
+		renderer.render(drawable);
 	}
 }

@@ -2,8 +2,6 @@ package com.formigone.rokkojs.client;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Renderer2D implements Renderer {
 
@@ -28,7 +26,8 @@ public class Renderer2D implements Renderer {
 	}
 
 	public void render2D(Drawable2D drawable) {
-		GWT.log("Rendering with my Renderer2D");
+		System.out.println("Rendering with my Renderer2D");
+		context.clearRect(0, 0, width, height);
 		context.fillRect(drawable.getX(), drawable.getY(), drawable.getWidth(), drawable.getHeight());
 	}
 

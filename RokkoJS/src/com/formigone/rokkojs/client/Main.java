@@ -37,9 +37,9 @@ public class Main implements EntryPoint {
 			public void onKeyUp(KeyUpEvent event) {
 				square.setKeyReleased(event.getNativeKeyCode());
 			}
-			
+
 		}, KeyUpEvent.getType());
-		
+
 		scene.render();
 	}
 }

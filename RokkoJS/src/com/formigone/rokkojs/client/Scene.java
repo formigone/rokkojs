@@ -1,14 +1,21 @@
 package com.formigone.rokkojs.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
 
 public class Scene {
-	private Movable2D movable;
+	private List<Movable2D> movable;
 	private Renderer renderer;
+	
+	public Scene() {
+		movable = new ArrayList<Movable2D>();
+	}
 
 	public void setMovables(Movable2D drawables) {
-		this.movable = drawables;
+		movable.add(drawables);
 	}
 
 	public void setRenderer(Renderer renderer) {
@@ -17,7 +24,9 @@ public class Scene {
 
 	public void onRender() {
 		System.out.println("Rendering scene");
-		renderer.render(movable);
+		for (Movable2D entity: movable) {
+			renderer.render(entity);
+		}
 	}
 	
 	public void render() {
@@ -28,7 +37,10 @@ public class Scene {
 			@Override
 			public void execute(double timestamp) {
 				onRender();
-				movable.updatePosition();
+				for (Movable2D entity: movable) {
+					entity.updatePosition();
+				}
+
 				AnimationScheduler.get().requestAnimationFrame(this);
 			}
 		});

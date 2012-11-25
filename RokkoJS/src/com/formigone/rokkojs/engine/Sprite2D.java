@@ -2,6 +2,7 @@ package com.formigone.rokkojs.engine;
 
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.Image;
 
 public class Sprite2D extends Drawable {
@@ -9,6 +10,8 @@ public class Sprite2D extends Drawable {
 	private ImageElement texture;
 	private boolean isTextureReady;
 	private Context2d ctx;
+	
+	public int SIZE;
 
 	public Sprite2D(Image texture) {
 		this(texture, 0, 0);
@@ -19,6 +22,8 @@ public class Sprite2D extends Drawable {
 		this.y = y;
 		this.texture = ImageElement.as(texture.getElement());
 		ctx = null;
+		
+		SIZE = Random.nextInt(64) + 16;
 	}
 
 	public boolean isReady() {
@@ -30,6 +35,6 @@ public class Sprite2D extends Drawable {
 		if (ctx == null)
 			ctx = (Context2d) renderer.getRenderer();
 
-		ctx.drawImage(texture, x, y);
+		ctx.drawImage(texture, x, y, SIZE, SIZE);
 	}
 }

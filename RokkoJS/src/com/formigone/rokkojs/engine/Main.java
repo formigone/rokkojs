@@ -16,12 +16,19 @@ public class Main implements EntryPoint {
 
 	private Scene scene;
 	private Renderer renderer;
-	private List<Drawable> entities;
+	private List<Movable> entities;
 	private List<Image> textures;
 	private int resourcesReady;
 
+	private List<String> sprites = new ArrayList<String>();
+	
 	@Override
 	public void onModuleLoad() {
+		sprites.add("img/sprites/megaman-jump.png");
+		sprites.add("img/sprites/megaman-jump-shoot.png");
+		sprites.add("img/sprites/mario-jump.png");
+		sprites.add("img/sprites/luigi-jump.png");
+		
 		resourcesReady = 0;
 		
 		Canvas canvas = Canvas.createIfSupported();
@@ -30,31 +37,35 @@ public class Main implements EntryPoint {
 
 		textures = new ArrayList<Image>();
 		
-		textures.add(new Image(GWT.getModuleBaseURL() + "img/sprites/megaman-head.png"));
-		RootPanel.get("imgShelf").add(textures.get(textures.size() - 1));
+		for (int tI = 0; tI < sprites.size(); tI++) {
+			textures.add(new Image(GWT.getModuleBaseURL() + sprites.get(tI)));
+			RootPanel.get("imgShelf").add(textures.get(tI));
 
-		textures.get(textures.size() - 1).addLoadHandler(new LoadHandler() {
+			textures.get(tI).addLoadHandler(new LoadHandler() {
+	
+				@Override
+				public void onLoad(LoadEvent event) {
+					resourcesReady++;
+					runIfReady();
+				}
+			});
+		}
 
-			@Override
-			public void onLoad(LoadEvent event) {
-				resourcesReady++;
-				runIfReady();
-			}
-		});
-
-		entities = new ArrayList<Drawable>();
+		entities = new ArrayList<Movable>();
 		
-		for (int i = 0; i < 100; i++) {
-			entities.add(new Sprite2D(textures.get(textures.size() - 1), 
+		for (int i = 0; i < 25; i++) {
+			entities.add(new Entity(new Sprite2D(textures.get(Random.nextInt(textures.size())), 
 					Random.nextInt(canvas.getCanvasElement().getWidth()),
-					Random.nextInt(canvas.getCanvasElement().getHeight())
+					Random.nextInt(canvas.getCanvasElement().getHeight())),
+					Random.nextInt(20) + 5,
+					Random.nextInt(20) + 5
 					));
 		}
 
 		renderer = new Renderer2D(canvas);
 		scene = new Scene(renderer);
-		scene.setFps(2);
-		scene.addDrawable(entities);
+		scene.setFps(30);
+		scene.addMovable(entities);
 
 		RootPanel.get().add(canvas);
 	}

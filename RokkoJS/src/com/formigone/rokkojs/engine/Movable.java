@@ -6,11 +6,12 @@ abstract class Movable {
 	protected int speedY;
 	protected Drawable sprite;
 
-	public Movable() {
-		this(10, 10);
+	public Movable(Drawable sprite) {
+		this(sprite, 10, 10);
 	}
 	
-	public Movable(int speedX, int speedY) {
+	public Movable(Drawable sprite, int speedX, int speedY) {
+		this.sprite = sprite;
 		this.speedX = speedX;
 		this.speedY = speedY;
 	}
@@ -20,4 +21,8 @@ abstract class Movable {
 	}
 
 	public abstract void move(float x, float y);
+	public void moveTo(float x, float y) {
+		sprite.setX(x);
+		sprite.setY(y);
+	}
 }

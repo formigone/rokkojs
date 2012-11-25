@@ -9,14 +9,14 @@ import com.google.gwt.user.client.Timer;
 
 public class Scene {
 	private Renderer renderer;
-	private List<Drawable> drawables;
+	private List<Movable> movables;
 	private int fps;
 	private int frameDelay;
 	private double tick;
 	
 	public Scene(Renderer renderer) {
 		this.renderer = renderer;
-		drawables = new ArrayList<Drawable>();
+		movables = new ArrayList<Movable>();
 		fps = 20;
 		tick = 0;
 		setFrameDelay();
@@ -31,13 +31,13 @@ public class Scene {
 		setFrameDelay();
 	}
 	
-	public void addDrawable(Drawable drawable) {
-		drawables.add(drawable);
+	public void addMovable(Movable movable) {
+		movables.add(movable);
 	}
 	
-	public void addDrawable(List<Drawable> drawables) {
-		for (Drawable drawable: drawables)
-			this.drawables.add(drawable);
+	public void addMovable(List<Movable> movables) {
+		for (Movable movable: movables)
+			this.movables.add(movable);
 	}
 	
 	public void run() {
@@ -48,6 +48,7 @@ public class Scene {
 				if (timestamp > tick) {
 					tick = timestamp + frameDelay;
 					
+					updateEntities();
 					render();
 				}
 				
@@ -56,8 +57,17 @@ public class Scene {
 		});
 	}
 	
+	private void updateEntities() {
+		for (Movable movable: movables) {
+			movable.move(0, 1);
+			if (movable.getSprite().getY() > renderer.getHeight())
+				movable.moveTo(movable.getSprite().getX(), 0 - movable.getSprite().getHeight());
+		}
+	}
+	
 	private void render() {
-		for (Drawable drawable: drawables)
-			drawable.draw(renderer);
+		renderer.clear();
+		for (Movable movable: movables)
+			movable.getSprite().draw(renderer);
 	}
 }

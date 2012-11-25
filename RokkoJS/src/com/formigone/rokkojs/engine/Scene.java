@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.animation.client.AnimationScheduler.AnimationCallback;
+import com.google.gwt.user.client.Timer;
 
 public class Scene {
 	private Renderer renderer;
@@ -35,8 +36,6 @@ public class Scene {
 	}
 	
 	public void run() {
-		System.out.println("Running");
-
 		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
 			
 			@Override
@@ -53,8 +52,7 @@ public class Scene {
 	}
 	
 	private void render() {
-		for (Drawable drawable: drawables) {
+		for (Drawable drawable: drawables)
 			drawable.draw(renderer);
-		}
 	}
 }

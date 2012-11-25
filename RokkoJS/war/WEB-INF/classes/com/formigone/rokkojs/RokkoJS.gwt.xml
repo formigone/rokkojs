@@ -5,4 +5,5 @@
 	<inherits name='com.google.gwt.user.User' />
 	<entry-point class='com.formigone.rokkojs.engine.Main' />
 	<source path='engine' />
+	<public path='res' />
 </module>

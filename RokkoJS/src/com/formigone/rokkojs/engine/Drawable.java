@@ -1,10 +1,10 @@
 package com.formigone.rokkojs.engine;
 
 abstract class Drawable {
-	private float x;
-	private float y;
-	private int width;
-	private int height;
+	protected float x;
+	protected float y;
+	protected int width;
+	protected int height;
 	
 	public Drawable() {
 		this(0, 0, 50, 50);

@@ -15,3 +15,7 @@ canvas {
 	margin: 50px auto;
 	box-shadow: 0 5px 20px #aaa;
 }
+
+#imgShelf {
+	display: none;
+}

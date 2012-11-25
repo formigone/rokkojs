@@ -9,7 +9,7 @@ abstract class Drawable {
 	public Drawable() {
 		this(0, 0, 50, 50);
 	}
-	
+
 	public Drawable(float x, float y, int width, int height) {
 		this.x = x;
 		this.y = y;
@@ -32,6 +32,24 @@ abstract class Drawable {
 	}
 
 	public void setY(float y) {
+		this.y = y;
+	}
+	
+	public void addX(float x) {
+		this.x += x;
+	}
+	
+	public void addY(float y) {
+		this.y += y;
+	}
+	
+	public void addLocation(float x, float y) {
+		this.x += x;
+		this.y += y;
+	}
+	
+	public void setLocation(float x, float y) {
+		this.x = x;
 		this.y = y;
 	}
 

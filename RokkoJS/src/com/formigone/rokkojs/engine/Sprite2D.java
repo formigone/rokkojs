@@ -11,6 +11,12 @@ public class Sprite2D extends Drawable {
 	private Context2d ctx;
 
 	public Sprite2D(Image texture) {
+		this(texture, 0, 0);
+	}
+	
+	public Sprite2D(Image texture, float x, float y) {
+		this.x = x;
+		this.y = y;
 		this.texture = ImageElement.as(texture.getElement());
 		ctx = null;
 	}

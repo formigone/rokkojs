@@ -35,6 +35,11 @@ public class Scene {
 		drawables.add(drawable);
 	}
 	
+	public void addDrawable(List<Drawable> drawables) {
+		for (Drawable drawable: drawables)
+			this.drawables.add(drawable);
+	}
+	
 	public void run() {
 		AnimationScheduler.get().requestAnimationFrame(new AnimationCallback() {
 			

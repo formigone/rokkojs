@@ -8,6 +8,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -15,7 +16,7 @@ public class Main implements EntryPoint {
 
 	private Scene scene;
 	private Renderer renderer;
-	private Drawable entity;
+	private List<Drawable> entities;
 	private List<Image> textures;
 	private int resourcesReady;
 
@@ -41,12 +42,19 @@ public class Main implements EntryPoint {
 			}
 		});
 
-		entity = new Sprite2D(textures.get(textures.size() - 1));
+		entities = new ArrayList<Drawable>();
+		
+		for (int i = 0; i < 100; i++) {
+			entities.add(new Sprite2D(textures.get(textures.size() - 1), 
+					Random.nextInt(canvas.getCanvasElement().getWidth()),
+					Random.nextInt(canvas.getCanvasElement().getHeight())
+					));
+		}
 
 		renderer = new Renderer2D(canvas);
 		scene = new Scene(renderer);
 		scene.setFps(2);
-		scene.addDrawable(entity);
+		scene.addDrawable(entities);
 
 		RootPanel.get().add(canvas);
 	}

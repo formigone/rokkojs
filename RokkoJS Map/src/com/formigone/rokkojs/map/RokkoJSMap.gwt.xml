@@ -3,6 +3,8 @@
 <module rename-to="RokkoJSMap">
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="com.google.gwt.json.JSON" />
+	<inherits name="com.google.gwt.resources.Resources" />
 	<source path="client" />
+	<source path="res" />
 	<entry-point class="com.formigone.rokkojs.map.client.Main" />
 </module>

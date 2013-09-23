@@ -7,14 +7,6 @@ Features
 --------
 
 * 2D games
-* ~~3D games~~
-
-
-~~UML~~
----
-
-~~![Main engine structure and relationship](https://raw.github.com/formigone/rokkojs/master/doc/rokkojs-uml.png)~~
-
 
 
 Copyright 2012-2013 Rodrigo Silveira. All rights reserved.

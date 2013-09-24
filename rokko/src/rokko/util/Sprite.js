@@ -3,7 +3,7 @@ goog.provide("rokko.util.Sprite");
 goog.require("goog.dom");
 
 /**
- *
+ * @deprecated
  * @constructor
  */
 rokko.util.Sprite = function(sheet, options) {

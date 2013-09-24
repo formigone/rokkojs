@@ -16,14 +16,14 @@ goog.provide("rokko.graphics.ImageSequence");
 
 var Sprite = function() {
     this.img = Image;
+    this.pos = {};
+    this.size = {};
 };
 
 Sprite.prototype.getImage = function(){};
 
 var Image = function() {
     this.img;
-    this.pos = {};
-    this.size = {};
 };
 
 /** @extends Sprite */

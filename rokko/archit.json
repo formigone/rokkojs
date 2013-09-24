@@ -1,0 +1,60 @@
+{
+    "RendererComponent::Component": {
+        "_renderer": "DrawComponent",
+        "_entities": "[Entity]",
+        "_scene": "Scene",
+        "exec": "function(){}"
+    }
+}
+
+Sprite class:
+
+goog.provide("rokko.graphics.Sprite");
+goog.provide("rokko.graphics.AnimatedSprite");
+goog.provice("rokko.graphics.Image");
+goog.provide("rokko.graphics.ImageSequence");
+
+var Sprite = function() {
+    this.img = Image;
+};
+
+Sprite.prototype.getImage = function(){};
+
+var Image = function() {
+    this.img;
+    this.pos = {};
+    this.size = {};
+};
+
+/** @extends Sprite */
+var AnimatedSprite = function() {
+    this.frame = 0;
+    this.cell = 0;
+    this.sprites = {
+        STANDING_RIGHT: ImageSequence,
+        STANDING_LEFT: ImageSequence,
+    ...
+    };
+};
+
+Entity.prototype.EntityState = {
+    STANDING_RIGHT: 0,
+    STANDING_LEFT: 1,
+...
+};
+
+AnimatedSprite.prototype.getImage = function(){};
+
+/** @extends Image */
+var ImageSequence = function() {
+    this.img;
+    this.freq;
+    this.frames = [
+        {
+            pos: {},
+            size: {}
+        }
+    ];
+};
+
+ImageSequence.prototype.getFrame = function(){};

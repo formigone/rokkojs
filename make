@@ -1,4 +1,4 @@
-./../lib/closure-library/closure/bin/build/closurebuilder.py \
+./lib/closure-library/closure/bin/build/closurebuilder.py \
  --root=/usr/local/google-closure/closure-library/ \
  --root=./ \
  --namespace=rokko.go \

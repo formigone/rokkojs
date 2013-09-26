@@ -16,13 +16,23 @@ rokko.graphics.AnimatedSprite = function(options) {
     this.frame = this.defFrame;
 
     /** @protected */
-    /** @type {rokko.graphics.Sprite} */
+    /** @type {Object<rokko.graphics.Sprite>} */
     this.sprites = options.sprites;
 };
 
-rokko.graphics.AnimatedSprite.prototype.setSprite = function(frame) {
-    // TODO: Before setting new frame, reset previous one so future resetting to that same frame begins from the beginning.
+rokko.graphics.AnimatedSprite.prototype.setSprite = function(frame, inheritKeyframe) {
+    inheritKeyframe = inheritKeyframe || false;
+
+    var keyFrame = 0;
+    var sprite = this.sprites[this.frame].getImage();
+
+    if (inheritKeyframe) {
+        keyFrame = sprite.getFrame();
+    }
+
+    sprite.resetFrame();
     this.frame = frame;
+    sprite.setFrame(keyFrame);
 };
 
 rokko.graphics.AnimatedSprite.prototype.resetSprite = function() {

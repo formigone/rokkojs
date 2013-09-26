@@ -236,6 +236,7 @@ function main(){
     var canvas = new rokko.components.DrawComponent();
     var renderer = new rokko.components.RendererComponent(canvas);
 
+    canvas.setDebugMode(true);
     canvas.show(document.body);
 
     renderer.addEntity(hero);
@@ -270,7 +271,7 @@ function main(){
 
         if (key == 38) {
             e.preventDefault();
-            hero6.sprite.setSprite(3);
+            hero6.sprite.setSprite(3, true);
         }
 
         if (key == 39) {
@@ -280,7 +281,11 @@ function main(){
 
         if (key == 40) {
             e.preventDefault();
-            hero6.sprite.setSprite(4);
+            hero6.sprite.setSprite(4, true);
+        }
+
+        if (key == 68) {
+            canvas.setDebugMode(!canvas.isDebugMode());
         }
 
         this.dispatchEvent(EntityBehavior.EventTYpe.KEY);

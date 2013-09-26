@@ -8,7 +8,7 @@ goog.require("goog.dom");
  * @constructor
  * @extends {rokko.components.Component}
  */
-rokko.components.DrawComponent = function(width, height, smooth) {
+rokko.components.DrawComponent = function(width, height, smooth, isDebugMode) {
     goog.base(this);
 
     /** @private */
@@ -19,6 +19,7 @@ rokko.components.DrawComponent = function(width, height, smooth) {
     /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext("2d");
     this.ctx.webkitImageSmoothingEnabled = smooth || false;
+    this.__RENDER_DEBUGGING_MODE__ = isDebugMode || false;
 };
 
 goog.inherits(rokko.components.DrawComponent, rokko.components.Component);
@@ -33,11 +34,12 @@ rokko.components.DrawComponent.prototype.exec = function(entity, time){
     this.ctx.drawImage(el, pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, size.w * entity.size.s, size.h * entity.size.s);
 
     // DEBUGGING;
-    // TODO: Remove this whole thing altogether before deploying. Only conditionally removing it will definitely impact performance on final product
-    this.ctx.strokeStyle = "#cc0000";
-    this.ctx.beginPath();
-    this.ctx.rect(entity.pos.x, entity.pos.y, entity.size.w || (size.w * entity.size.s), entity.size.h || (size.h * entity.size.s));
-    this.ctx.stroke();
+    if (this.__RENDER_DEBUGGING_MODE__) {
+        this.ctx.strokeStyle = "#cc0000";
+        this.ctx.beginPath();
+        this.ctx.rect(entity.pos.x, entity.pos.y, entity.size.w || (size.w * entity.size.s), entity.size.h || (size.h * entity.size.s));
+        this.ctx.stroke();
+    }
 };
 
 /** @inheritDoc */
@@ -45,6 +47,14 @@ rokko.components.DrawComponent.prototype.ID = "__DRAW_COMPONENT__";
 
 rokko.components.DrawComponent.prototype.show = function(container){
     container.appendChild(this.canvas);
+};
+
+rokko.components.DrawComponent.prototype.setDebugMode = function(isOn){
+    this.__RENDER_DEBUGGING_MODE__ = isOn;
+};
+
+rokko.components.DrawComponent.prototype.isDebugMode = function(){
+    return this.__RENDER_DEBUGGING_MODE__;
 };
 
 rokko.components.DrawComponent.prototype.clear = function(){

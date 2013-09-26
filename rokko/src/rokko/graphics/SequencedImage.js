@@ -53,6 +53,19 @@ rokko.graphics.SequencedImage.prototype.getSize = function(){
     return this.frames[this.currFrame].size;
 };
 
+rokko.graphics.SequencedImage.prototype.getFrame = function(){
+    return this.currFrame;
+};
+
+/**
+ * Set animation pointer to a particular keyframe. If the specified keyframe is out of bounds, set it to the first keyframe
+ *
+ * @param {number} keyFrame
+ */
+rokko.graphics.SequencedImage.prototype.setFrame = function(keyFrame){
+    this.currFrame = keyFrame < this.frames.length ? keyFrame : 0;
+};
+
 rokko.graphics.SequencedImage.prototype.resetFrame = function(){
     this.currFrame = 0;
 };

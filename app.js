@@ -9,6 +9,26 @@ goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
 
 goog.require("goog.events.KeyHandler");
+goog.require("goog.net.XhrIo");
+
+// TODO: create objects to manage this life cycle. Maybe we first check if the config file is cached. If not, fetch it. Once fetched, run overloaded exec method (**Component** ??) and load everyone, and do whatever is needed with them
+function genSprite(type, name, cb) {
+    var url = "/config/genSprite.php?type=";
+
+    goog.net.XhrIo.send(url + type, function(e){
+        var response = e.target.getResponseText();
+        var data = JSON.parse(response);
+
+        var img = new rokko.graphics.SequencedImage(data[name].img, {
+            frames: data[name].frames,
+            freq: data[name].freq,
+            currFrame: data[name].currFrame
+        });
+
+        var sprite = new rokko.graphics.Sprite(img);
+        cb(sprite);
+    });
+}
 
 function main(){
     var standing = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
@@ -226,7 +246,6 @@ function main(){
         sprites: animFrames
     });
 
-    var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: null, h: null, s: 7.5}, sprites.standing);
     var hero2 = new rokko.entities.Entity({x: 300, y: 150}, {w: null, h: null, s: 3.5}, sprites.running);
     var hero3 = new rokko.entities.Entity({x: 450, y: 150}, {w: null, h: null, s: 3.5}, sprites.jumping);
     var hero4 = new rokko.entities.Entity({x: 450, y: 300}, {w: null, h: null, s: 3.5}, sprites.spinning);
@@ -239,7 +258,8 @@ function main(){
     canvas.setDebugMode(true);
     canvas.show(document.body);
 
-    renderer.addEntity(hero);
+    genSprite('demo', 'standing', func);
+
     renderer.addEntity(hero2);
     renderer.addEntity(hero3);
     renderer.addEntity(hero4);
@@ -306,6 +326,11 @@ function main(){
     function go(time) {
         renderer.exec(time);
         requestAnimationFrame(go);
+    }
+
+    function func(sprite){
+        var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: null, h: null, s: 7.5}, sprite);
+        renderer.addEntity(hero);
     }
 
     go(0);

@@ -21,7 +21,6 @@ rokko.components.DrawComponent = function(width, height, smooth, isDebugMode) {
     this.ctx.webkitImageSmoothingEnabled = smooth || false;
     this.__RENDER_DEBUGGING_MODE__ = isDebugMode || false;
 };
-
 goog.inherits(rokko.components.DrawComponent, rokko.components.Component);
 
 /** @inheritDoc */

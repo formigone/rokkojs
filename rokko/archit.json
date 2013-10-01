@@ -58,3 +58,62 @@ var ImageSequence = function() {
 };
 
 ImageSequence.prototype.getFrame = function(){};
+
+@Factories
+
+SpriteFactory = {
+   SpriteFactory: function,
+   resources: Array.<string[rec]>,
+   sprites: Object.<string[name], Object[data]>,
+   make: function(string[name]): Sprite|null,
+   @throw Error if config file cannot built Sprite
+   loadFromJson: function(string[name], string[url], function(SpriteFactory[this])[callback], boolean[override]),
+}
+
+EntityFactory = {
+   EntityFactory: function(SpriteFactory),
+   spriteFact: SpriteFactory,
+   getSpriteFactory: function():SpriteFactory,
+   resources: Array.<string[rec]>,
+   entities: Object.<string[name], Object[data]>,
+   make: function(string[name]): Entity|null,
+   @throw Error if config file cannot built Sprite
+   loadFromJson: function(string[name], string[url], function(EntityFactory[this])[callback], boolean[override])
+}
+
+@Components
+
+GameLoopComponent: Component = {
+   GameLoopComponent: function(number[fps]),
+   isRunning: boolean,
+   fps: number,
+   exec: function(),
+   stop: function(),
+   go: function(number[time]),
+   onUpdate: function(number[time]),
+   onDraw: function(number[time]),
+}
+
+MoveComponent: Component = {
+   MoveComponent: function,
+   keys: Object.<number[keyCode], boolean[isPressed]>,
+   keyMapping: Object.<string[keyName], number[keyCode]>,
+   // Register key event listeners
+   init: function,
+   exec: function(Entity[entity])
+}
+
+@Math
+
+Vec2 = {
+   Vec2: function(number[x]=, number[y]=),
+   x: number,
+   y: number,
+   add: function(Vec2|{x:number,y:number}),
+   subtract: function(Vec2|{x:number,y:number}),
+   multiply: function(number[scaler]),
+   normalize: function,
+   getComponents: function:{x:number, y:number})
+   set: function(number[x], number[y])
+}
+

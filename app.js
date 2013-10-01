@@ -11,6 +11,16 @@ goog.require("rokko.components.RendererComponent");
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
 
+var soundFX = {
+    rain: new Audio("/sound/rain.mp3"),
+    thunder: [
+//        new Audio("/sound/thunder.mp3"),
+        new Audio("/sound/thunder2.mp3"),
+        new Audio("/sound/thunder3.mp3")
+    ]
+};
+var thunder = 0;
+
 // TODO: create objects to manage this life cycle. Maybe we first check if the config file is cached. If not, fetch it. Once fetched, run overloaded exec method (**Component** ??) and load everyone, and do whatever is needed with them
 function genSprite(type, name, cb) {
     var url = "/config/genSprite.php?type=";
@@ -304,8 +314,13 @@ function main(){
             hero6.sprite.setSprite(4, true);
         }
 
-        if (key == 68) {
+        if (key == 68 /* D */) {
             canvas.setDebugMode(!canvas.isDebugMode());
+        }
+
+        // Demo thunder effect... obviously this is still very raw and manual... but there it is.
+        if (key == 84 /* T */) {
+            doThunder(thunder);
         }
 
         this.dispatchEvent(EntityBehavior.EventTYpe.KEY);
@@ -324,6 +339,12 @@ function main(){
     goog.events.listen(keyHandler, goog.events.KeyHandler.EventType.KEY, entityBeh.key);
 
     function go(time) {
+        soundFX.rain.volume = 0.5;
+        soundFX.rain.play();
+
+        thunder = parseInt(Math.random() * soundFX.thunder.length);
+        doThunder(thunder);
+
         renderer.exec(time);
         requestAnimationFrame(go);
     }
@@ -334,6 +355,38 @@ function main(){
     }
 
     go(0);
+
+    function doThunder(thunder) {
+        if (soundFX.thunder[thunder].paused || false) {
+            soundFX.thunder[thunder].volume = 1.00;
+            soundFX.thunder[thunder].play();
+            renderer.bwMode = false;
+
+            // ON
+            setTimeout(function(){
+                renderer.bwMode = true;
+                setTimeout(function(){
+
+                    // OFF
+                    renderer.bwMode = false;
+                    renderer.wonlyMode = true;
+
+                    setTimeout(function(){
+
+                        // ON
+                        renderer.wonlyMode = false;
+                        renderer.bwMode = true;
+
+                        setTimeout(function(){
+
+                            // OFF
+                            renderer.bwMode = false;
+                        }, 100);
+                    }, 100);
+                }, 100);
+            }, 800);
+        }
+    }
 }
 
 goog.exportSymbol("main", main);

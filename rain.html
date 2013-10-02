@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+<body>
+
+<style>
+    body {
+        background: #333;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    canvas {
+        display: block;
+        /*margin: 50px 0 0;*/
+        /*left: 50%;*/
+        /*margin-left: -450px;*/
+        top: 10%;
+        left: 10%;
+        width: 80%;
+        height: 80%;
+        position: absolute;
+    }
+
+</style>
+
+<script>
+
+// Make it so references to this function kind of look like a GLSL file
+var allBlackShader = {};
+allBlackShader.glsl = function() {
+    var img = this.getImageData(0, 0, WIDTH, HEIGHT);
+    var data = img.data;
+
+    for (var i = 0, len = data.length; i < len; i += 4) {
+        data[i] = data[i + 1] = data[i + 2] = 255 - data[i + 3];
+    }
+
+    this.putImageData(img, 0, 0);
+
+    setTimeout(function () {
+        doThunder = false;
+    }, 150);
+};
+
+var allWhiteShader = {};
+allWhiteShader.glsl = function() {
+    var img = this.getImageData(0, 0, WIDTH, HEIGHT);
+    var data = img.data;
+
+    for (var i = 0, len = data.length; i < len; i += 4) {
+        data[i] = data[i + 1] = data[i + 2] = data[i + 3];
+    }
+
+    this.putImageData(img, 0, 0);
+
+    setTimeout(function () {
+        doThunder = false;
+    }, 150);
+};
+
+var defShader = {};
+defShader.glsl = function() {
+    return 0;
+};
+
+// Some application-level convenience function that determines what shader is wanted based on some condition
+function getAppropriateShaderProgram(name) {
+    if (doThunder) {
+        if (name == Layers.BACKGROUND) {
+            return CanvasRenderingContext2D.customShaderPrograms[name];
+        }
+
+        if (name == Layers.FOREGROUND) {
+            return CanvasRenderingContext2D.customShaderPrograms[name];
+        }
+    }
+
+    return CanvasRenderingContext2D.customShaderPrograms[0];
+}
+
+//
+// What this API could possibly look like... why not?!
+//
+
+// Set up default shader program. Note the fake reference to a GLSL "file"
+CanvasRenderingContext2D.customShaderPrograms = [defShader.glsl];
+
+// Each canvas context has its own custom shader. Note the cute addition of the fake [and out of place] dev prefix =)
+CanvasRenderingContext2D.prototype["-rokko-customShader"] = defShader;
+
+// Some "internal" hook for the custom shader to run (only needed in the implementation of this demo.
+// The dream is that each draw call on the ctx instance would be done using whatever program is currently bound
+CanvasRenderingContext2D.prototype.runCustomShader = function() {
+    this["-rokko-customShader"].call(this);
+};
+
+// Compile a shader program and return a pointer to it
+CanvasRenderingContext2D.prototype.compileCustomShader = function(fragmentShader, vertexShader) {
+    CanvasRenderingContext2D.customShaderPrograms.push(fragmentShader);
+    return CanvasRenderingContext2D.customShaderPrograms.length - 1;
+};
+
+CanvasRenderingContext2D.prototype.bindCustomShader = function(shaderProgram) {
+    this["-rokko-customShader"] = shaderProgram;
+};
+
+
+
+var WIDTH = 800;
+var HEIGHT = 600;
+var MAX_RAIN = 108;
+var isPaused = false;
+var doThunder = false;
+var shaders = {};
+var Layers = {};
+
+function main() {
+    var canvas = document.createElement("canvas");
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+    var ctx = canvas.getContext("2d");
+    ctx.webkitImageSmoothingEnabled = false;
+
+    var canvas2 = document.createElement("canvas");
+    canvas2.width = WIDTH * 0.5;
+    canvas2.height = HEIGHT * 0.5;
+    var ctx2 = canvas2.getContext("2d");
+
+    // Compiile shader program and hold on to its pointer
+    shaders.allBlack = ctx2.compileCustomShader(allWhiteShader.glsl);
+    shaders.allWhite = ctx.compileCustomShader(allBlackShader.glsl);
+
+    Layers.FOREGROUND = shaders.allWhite;
+    Layers.BACKGROUND = shaders.allBlack;
+
+    var imgs = {
+        rain: new Image(),
+        mm: new Image()
+    };
+    imgs.rain.src = "/img/rain.png";
+    imgs.mm.src = "/img/8bitmm.gif";
+
+    var megaman = {
+        x: WIDTH * 0.25,
+        y: HEIGHT * 0.75,
+        width: 64,
+        height: 64,
+        speed: 3,
+        scale: 3,
+        currFrame: 0,
+        frames: [
+            {
+                pos: {
+                    x: 190,
+                    y: 11
+                },
+                size: {
+                    w: 24,
+                    h: 24
+                },
+                freq: 100
+            },
+            {
+                pos: {
+                    x: 220,
+                    y: 11
+                },
+                size: {
+                    w: 16,
+                    h: 24
+                },
+                freq: 100
+            },
+            {
+                pos: {
+                    x: 241,
+                    y: 11
+                },
+                size: {
+                    w: 21,
+                    h: 24
+                },
+                freq: 100
+            }
+        ]
+    };
+
+    var rains = [];
+    for (var i = 0; i < MAX_RAIN; i++) {
+        rains[i] = {
+            width: parseInt(Math.random() * 1 + 1),
+            height: parseInt(Math.random() * 55 + 10),
+            x: parseInt(Math.random() * WIDTH),
+            y: parseInt(Math.random() * HEIGHT),
+            speed: Math.random() * 10 + 3
+        }
+    }
+
+    var lastTime = 0;
+    var freq = 1000 / 30;
+
+    var btnThunder = document.createElement("button");
+    btnThunder.textContent = "Thunder";
+    btnThunder.addEventListener("click", function () {
+        doThunder = !doThunder;
+    }, false);
+
+    var btnRun = document.createElement("button");
+    btnRun.textContent = "Pause";
+    btnRun.addEventListener("click", function () {
+        isPaused = !isPaused;
+        render(0);
+    }, false);
+
+    document.body.appendChild(btnRun);
+    document.body.appendChild(btnThunder);
+    document.body.appendChild(canvas2);
+    document.body.appendChild(canvas);
+
+    function renderBackground(time) {
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        ctx2.fillStyle = "000";
+        ctx2.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx2.fill();
+
+        ctx2.runCustomShader();
+    }
+
+    function renderForeground(time) {
+        var frame = megaman.frames[megaman.currFrame];
+        if (time - lastTime >= frame.freq) {
+            megaman.currFrame = (megaman.currFrame + 1) % megaman.frames.length;
+            lastTime = time;
+        }
+
+        megaman.x += megaman.speed;
+        if (megaman.x > WIDTH + megaman.width) {
+            megaman.x = 0 - megaman.width;
+        }
+
+        ctx.drawImage(imgs.mm, frame.pos.x, frame.pos.y, frame.size.w, frame.size.h, megaman.x, megaman.y, frame.size.w * megaman.scale, frame.size.h * megaman.scale);
+
+        for (var i = 0, rain; i < MAX_RAIN; i++) {
+            rain = rains[i];
+            rain.y = (rain.y + rain.speed) % (HEIGHT + rain.height);
+            ctx.drawImage(imgs.rain, rain.x, rain.y, rain.width, rain.height);
+        }
+
+        ctx.runCustomShader();
+    }
+
+    function render(time) {
+        if (time - lastTime >= freq) {
+            ctx2.bindCustomShader(getAppropriateShaderProgram(Layers.BACKGROUND));
+            renderBackground(time);
+
+            ctx.bindCustomShader(getAppropriateShaderProgram(Layers.FOREGROUND));
+            renderForeground(time);
+        }
+
+        if (!isPaused) {
+            requestAnimationFrame(render);
+        }
+    }
+
+    render(0);
+}
+
+main();
+
+</script>
+
+</body>
+</html>

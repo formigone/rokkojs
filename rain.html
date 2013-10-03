@@ -9,26 +9,74 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden;
+    }
+
+    #demo {
+        margin: 20px;
+        width: 800px;
+        height: 600px;
+        position: relative;
     }
 
     canvas {
         display: block;
-        /*margin: 50px 0 0;*/
-        /*left: 50%;*/
-        /*margin-left: -450px;*/
-        top: 10%;
-        left: 10%;
-        width: 80%;
-        height: 80%;
+        top: 0;
+        left: 0;
         position: absolute;
+        width: 100%;
+        height: 100%;
     }
 
+    #ctrls {
+        margin: 20px;
+        width: 800px;
+    }
+
+    h1, p {
+        color: #0066cc;
+        margin: 20px;
+        font-family: monospace;
+    }
+
+    h1 span {
+        color: #fff;
+    }
+
+    p, a {
+        color: #fff;
+        line-height: 1.5em;
+        font-size: 1.15em;
+    }
+
+    a {
+        color: #0066cc;
+    }
 </style>
 
-<script>
+<h1>HTML5 Canvas 2D API Suggestion: <span>Custom Shader</span></h1>
+<div id="demo"></div>
+<div id="ctrls"></div>
+<p>Copyright &copy; 2013 <a href="http://www.rodrigo-silveira.com">Rodrigo Silveira</a>. All rights reserved. Mega Man is an awesome game, and all its rights, trademarks, etc. are property of Capcom.</p>
 
-// Make it so references to this function kind of look like a GLSL file
+<script>
+/**
+ * @overview The purpose of this demonstration is to illustrate one of the benefits that can be gained by being able
+ * to specify a custom fragment shader into the CanvasRenderingContext2D object.
+ *
+ * What the following application does is simulate such functionality by using functions as post-processors,
+ * which, when set, perform some transformation to the pixel data contained in a CanvasRenderingContext2D.
+ * Ideally, this would all be done at the GPU, by means of a user-specified fragment shader.
+ *
+ * @author Rodrigo Silveira <webmaster@rodrigo-sileira.com>
+ */
+
+
+
+/**
+ * Make it so references to this function kind of look like a GLSL file
+ *
+ * @type {Object.<string, Function>}
+ */
 var allBlackShader = {};
 allBlackShader.glsl = function() {
     var img = this.getImageData(0, 0, WIDTH, HEIGHT);
@@ -66,7 +114,12 @@ defShader.glsl = function() {
     return 0;
 };
 
-// Some application-level convenience function that determines what shader is wanted based on some condition
+/**
+ * Some application-level convenience function that determines what shader is wanted based on some condition
+ *
+ * @param {string} name
+ * @returns {Function}
+ */
 function getAppropriateShaderProgram(name) {
     if (doThunder) {
         if (name == Layers.BACKGROUND) {
@@ -85,19 +138,36 @@ function getAppropriateShaderProgram(name) {
 // What this API could possibly look like... why not?!
 //
 
-// Set up default shader program. Note the fake reference to a GLSL "file"
+/**
+ * Set up default shader program. Note the fake reference to a GLSL "file"
+ *
+ * @type {Array.<Function>}
+ */
 CanvasRenderingContext2D.customShaderPrograms = [defShader.glsl];
 
-// Each canvas context has its own custom shader. Note the cute addition of the fake [and out of place] dev prefix =)
+/**
+ * Each canvas context has its own custom shader. Note the cute addition of the fake [and out of place] dev prefix =)
+ *
+ * @type {Function}
+ */
 CanvasRenderingContext2D.prototype["-rokko-customShader"] = defShader;
 
-// Some "internal" hook for the custom shader to run (only needed in the implementation of this demo.
-// The dream is that each draw call on the ctx instance would be done using whatever program is currently bound
+/**
+ * Some "internal" hook for the custom shader to run (only needed in the implementation of this demo.
+ * The dream is that each draw call on the ctx instance would be done using whatever program is currently bound
+ *
+ */
 CanvasRenderingContext2D.prototype.runCustomShader = function() {
     this["-rokko-customShader"].call(this);
 };
 
-// Compile a shader program and return a pointer to it
+/**
+ * Compile a shader program and return a pointer to it
+ *
+ * @param {Function} fragmentShader
+ * @param {null} vertexShader
+ * @returns {number}
+ */
 CanvasRenderingContext2D.prototype.compileCustomShader = function(fragmentShader, vertexShader) {
     CanvasRenderingContext2D.customShaderPrograms.push(fragmentShader);
     return CanvasRenderingContext2D.customShaderPrograms.length - 1;
@@ -125,11 +195,15 @@ function main() {
     ctx.webkitImageSmoothingEnabled = false;
 
     var canvas2 = document.createElement("canvas");
-    canvas2.width = WIDTH * 0.5;
-    canvas2.height = HEIGHT * 0.5;
+    canvas2.width = WIDTH;
+    canvas2.height = HEIGHT;
     var ctx2 = canvas2.getContext("2d");
 
-    // Compiile shader program and hold on to its pointer
+    /**
+     * Compiile shader program and hold on to its pointer
+     *
+     * @type {number}
+     */
     shaders.allBlack = ctx2.compileCustomShader(allWhiteShader.glsl);
     shaders.allWhite = ctx.compileCustomShader(allBlackShader.glsl);
 
@@ -215,10 +289,10 @@ function main() {
         render(0);
     }, false);
 
-    document.body.appendChild(btnRun);
-    document.body.appendChild(btnThunder);
-    document.body.appendChild(canvas2);
-    document.body.appendChild(canvas);
+    document.getElementById("ctrls").appendChild(btnRun);
+    document.getElementById("ctrls").appendChild(btnThunder);
+    document.getElementById("demo").appendChild(canvas2);
+    document.getElementById("demo").appendChild(canvas);
 
     function renderBackground(time) {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);

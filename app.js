@@ -7,6 +7,7 @@ goog.require("rokko.graphics.Image");
 goog.require("rokko.graphics.SequencedImage");
 goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
+goog.require("rokko.factories.SpriteFactory");
 
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
@@ -41,6 +42,15 @@ function genSprite(type, name, cb) {
 }
 
 function main(){
+
+    var spriteFactory = new rokko.factories.SpriteFactory();
+    spriteFactory.loadFromJson("megaman", "/config/megaman.sprites.json", function(){
+        var mm = this.make("megaman");
+        console.log(mm);
+    });
+
+    return;
+
     var standing = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
         frames: [
             {

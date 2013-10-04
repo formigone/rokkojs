@@ -212,14 +212,18 @@ function main() {
 
     var imgs = {
         rain: new Image(),
-        mm: new Image()
+        mm: new Image(),
+        floor: new Image(),
+        bg: new Image()
     };
     imgs.rain.src = "/img/rain.png";
     imgs.mm.src = "/img/8bitmm.gif";
+    imgs.floor.src = "img/mm-level-4.png";
+    imgs.bg.src = "img/mm-level-4.png";
 
     var megaman = {
         x: WIDTH * 0.25,
-        y: HEIGHT * 0.75,
+        y: 426,
         width: 64,
         height: 64,
         speed: 3,
@@ -262,6 +266,48 @@ function main() {
         ]
     };
 
+    function createBlock(x, y, w, h) {
+        return block = {
+            x: x,
+            y: y,
+            width: w,
+            height: h,
+            pos: {
+                x: 168,
+                y: 120
+            },
+            size: {
+                w: 48,
+                h: 102
+            }
+        };
+    }
+
+    function createSky(x, y, w, h) {
+        return block = {
+            x: x,
+            y: y,
+            width: w,
+            height: h,
+            pos: {
+                x: 2,
+                y: 2
+            },
+            size: {
+                w: 150,
+                h: 150
+            }
+        };
+    }
+
+    var MAX_FLOOR = 20;
+    var floor = [];
+    for (var i = 0; i < MAX_FLOOR; i++) {
+        floor[i] = createBlock(i * 48, 600 - 102, 48, 102);
+    }
+
+    var bg = createSky(0, 0, 600, 500);
+    var bg2 = createSky(600, 0, 600, 500);
     var rains = [];
     for (var i = 0; i < MAX_RAIN; i++) {
         rains[i] = {
@@ -296,14 +342,21 @@ function main() {
 
     function renderBackground(time) {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx2.fillStyle = "000";
-        ctx2.fillRect(0, 0, WIDTH, HEIGHT);
-        ctx2.fill();
+//        ctx2.fillStyle = "000";
+//        ctx2.fillRect(0, 0, WIDTH, HEIGHT);
+//        ctx2.fill();
+        ctx2.drawImage(imgs.bg, bg.pos.x, bg.pos.y, bg.size.w, bg.size.h, bg.x, bg.y, bg.width, bg.height);
+        ctx2.drawImage(imgs.bg, bg2.pos.x, bg2.pos.y, bg2.size.w, bg2.size.h, bg2.x, bg2.y, bg2.width, bg2.height);
 
         ctx2.runCustomShader();
     }
 
     function renderForeground(time) {
+
+        for (var i = 0; i < MAX_FLOOR; i++) {
+            ctx.drawImage(imgs.floor, floor[i].pos.x, floor[i].pos.y, floor[i].size.w, floor[i].size.h, floor[i].x, floor[i].y, floor[i].width, floor[i].height);
+        }
+
         var frame = megaman.frames[megaman.currFrame];
         if (time - lastTime >= frame.freq) {
             megaman.currFrame = (megaman.currFrame + 1) % megaman.frames.length;

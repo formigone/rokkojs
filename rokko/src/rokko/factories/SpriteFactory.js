@@ -9,7 +9,7 @@ goog.require("goog.net.XhrIo");
  *
  * @constructor
  */
-rokko.factories.SpriteFactory = function(){
+rokko.factories.SpriteFactory = function () {
     /**
      * @private
      * @type {Object.<string, Object>}}
@@ -24,11 +24,11 @@ rokko.factories.SpriteFactory = function(){
  * @param {Function} callback
  * @param {boolean=} override
  */
-rokko.factories.SpriteFactory.prototype.loadFromJson = function(name, url, callback, override) {
+rokko.factories.SpriteFactory.prototype.loadFromJson = function (name, url, callback, override) {
     var self = this;
-    goog.net.XhrIo.send(url, function(e){
+    goog.net.XhrIo.send(url, function (e) {
         var xhr = /** @type {goog.net.XhrIo} */ (e.target);
-        self.sprites[name] = JSON.parse(xhr.getResponseText());
+        self.sprites[name] = goog.json.parse(xhr.getResponseText());
 
         callback.call(self);
     });
@@ -40,6 +40,18 @@ rokko.factories.SpriteFactory.prototype.loadFromJson = function(name, url, callb
  * @throw Error if config file cannot built Sprite
  * @return {rokko.graphics.Sprite|null}
  */
-rokko.factories.SpriteFactory.prototype.make = function(name) {
-    return this.sprites[name] || null;
+rokko.factories.SpriteFactory.prototype.make = function (name) {
+    if (!goog.isDefAndNotNull(this.sprites[name])) {
+        return null;
+    }
+
+    var json = this.sprites[name];
+
+    return new rokko.graphics.Sprite(
+        new rokko.graphics.SequencedImage(json.img, {
+            frames: json.frames,
+            freq: json.freq,
+            currFrame: json.currFrame
+        })
+    );
 };

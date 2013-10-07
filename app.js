@@ -8,6 +8,7 @@ goog.require("rokko.graphics.SequencedImage");
 goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
 goog.require("rokko.factories.SpriteFactory");
+goog.require("rokko.factories.EntityFactory");
 
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
@@ -42,12 +43,25 @@ function genSprite(type, name, cb) {
 }
 
 function main(){
+    var canvas = new rokko.components.DrawComponent();
+    var renderer = new rokko.components.RendererComponent(canvas);
+    canvas.show(document.body);
 
     var spriteFactory = new rokko.factories.SpriteFactory();
-    spriteFactory.loadFromJson("megaman", "/config/megaman.sprites.json", function(){
+    // TODO: Make this automatic - handled by entityFactory
+    spriteFactory.loadFromJson("standing", "/config/megaman.sprites.json", function(){});
+    var entityFactory = new rokko.factories.EntityFactory(spriteFactory);
+
+    entityFactory.loadFromJson("megaman", "/config/megaman.entity.json", function(){
         var mm = this.make("megaman");
-        console.log(mm);
+        renderer.addEntity(mm);
+        _go(0);
     });
+
+    function _go(time) {
+        renderer.exec(time);
+        requestAnimationFrame(go);
+    }
 
     return;
 

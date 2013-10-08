@@ -40,6 +40,159 @@
             ],
             "freq": 100,
             "currFrame": 0
+        },
+        {
+            "name": "running",
+            "img": "/img/8bitmm.gif",
+            "frames": [
+                {
+                    "pos": {
+                        "x": 190,
+                        "y": 11
+                    },
+                    "size": {
+                        "w": 24,
+                        "h": 24
+                    },
+                    "freq": 100
+                },
+                {
+                    "pos": {
+                        "x": 220,
+                        "y": 11
+                    },
+                    "size": {
+                        "w": 16,
+                        "h": 24
+                    },
+                    "freq": 100
+                },
+                {
+                    "pos": {
+                        "x": 241,
+                        "y": 11
+                    },
+                    "size": {
+                        "w": 21,
+                        "h": 24
+                    },
+                    "freq": 100
+                }
+            ],
+            "freq": 110,
+            "currFrame": 0
+        },
+        {
+            "name": "running2",
+            "img": "/img/8bitmm.gif",
+            "frames": [
+                {
+                    "pos": {
+                        "x": 144,
+                        "y": 270
+                    },
+                    "size": {
+                        "w": 24,
+                        "h": 25
+                    },
+                    "freq": 100
+                },
+                {
+                    "pos": {
+                        "x": 174,
+                        "y": 270
+                    },
+                    "size": {
+                        "w": 17,
+                        "h": 25
+                    },
+                    "freq": 100
+                },
+                {
+                    "pos": {
+                        "x": 197,
+                        "y": 270
+                    },
+                    "size": {
+                        "w": 22,
+                        "h": 25
+                    },
+                    "freq": 100
+                }
+            ],
+            "freq": 110,
+            "currFrame": 0
+        },
+        {
+            "name": "spinning",
+            "img": "/img/8bitmm.gif",
+            "frames": [
+                {
+                    "pos": {
+                        "x": 267,
+                        "y": 4
+                    },
+                    "size": {
+                        "w": 26,
+                        "h": 31
+                    },
+                    "freq": 75
+                },
+                {
+                    "pos": {
+                        "x": 241,
+                        "y": 154
+                    },
+                    "size": {
+                        "w": 21,
+                        "h": 31
+                    },
+                    "freq": 75
+                },
+                {
+                    "pos": {
+                        "x": 268,
+                        "y": 154
+                    },
+                    "size": {
+                        "w": 26,
+                        "h": 31
+                    },
+                    "freq": 75
+                },
+                {
+                    "pos": {
+                        "x": 298,
+                        "y": 154
+                    },
+                    "size": {
+                        "w": 22,
+                        "h": 31
+                    },
+                    "freq": 75
+                }
+            ],
+            "freq": 100,
+            "currFrame": 0
+        },
+        {
+            "name": "jumping",
+            "img": "/img/8bitmm.gif",
+            "frames": [
+                {
+                    "pos": {
+                        "x": 267,
+                        "y": 4
+                    },
+                    "size": {
+                        "w": 26,
+                        "h": 31
+                    },
+                    "freq": 100
+                }
+            ],
+            "freq": 100,
+            "currFrame": 0
         }
     ]
 }

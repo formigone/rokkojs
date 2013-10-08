@@ -10,7 +10,7 @@
                 "scale": 3.5
             },
             "sprites": [
-                "standing"
+                "standing", "running", "running2", "jumping", "spinning"
             ],
             "defFrame": "standing"
         }

@@ -94,10 +94,15 @@ GameLoopComponent: Component = {
    onDraw: function(number[time]),
 }
 
+@inherits goog.events.KeyCodes
+MoveComponent.KeyCode = {
+    KEY_XYZ,
+    GAMEPAD_BTN
+}
+
 MoveComponent: Component = {
    MoveComponent: function,
-   keys: Object.<number[keyCode], boolean[isPressed]>,
-   keyMapping: Object.<string[keyName], number[keyCode]>,
+   keys: Object.<MoveComponent.KeyCode, boolean>,
    // Register key event listeners
    init: function,
    exec: function(Entity[entity])
@@ -116,4 +121,3 @@ Vec2 = {
    getComponents: function:{x:number, y:number})
    set: function(number[x], number[y])
 }
-

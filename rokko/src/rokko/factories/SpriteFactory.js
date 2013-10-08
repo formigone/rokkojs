@@ -24,13 +24,17 @@ rokko.factories.SpriteFactory = function () {
  * @param {Function} callback
  * @param {boolean=} override
  */
-rokko.factories.SpriteFactory.prototype.loadFromJson = function (name, url, callback, override) {
+rokko.factories.SpriteFactory.prototype.loadFromJson = function (url, callback, override) {
     var self = this;
     goog.net.XhrIo.send(url, function (e) {
         var xhr = /** @type {goog.net.XhrIo} */ (e.target);
-        self.sprites[name] = goog.json.parse(xhr.getResponseText());
+        var json = goog.json.parse(xhr.getResponseText());
 
-        callback.call(self);
+        for (var i = 0, len = json.sprites.length; i < len; i++) {
+            self.sprites[json.sprites[i].name] = json.sprites[i];
+        }
+
+        callback.call(null, self);
     });
 };
 

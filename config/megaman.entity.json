@@ -1,12 +1,18 @@
 {
-    "entity": {
-        "x": 300,
-        "y": 150,
-        "width": null,
-        "height": null,
-        "scale": 3.5
-    },
-    "sprites": [
-        "standing"
+    "entities": [
+        {
+            "name": "megaman",
+            "entity": {
+                "x": 300,
+                "y": 150,
+                "width": null,
+                "height": null,
+                "scale": 3.5
+            },
+            "sprites": [
+                "standing"
+            ],
+            "defFrame": "standing"
+        }
     ]
 }

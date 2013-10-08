@@ -23,13 +23,18 @@ rokko.factories.EntityFactory.prototype.getSpriteFactory = function() {
  * @param {Function} callback
  * @param {boolean=} override
  */
-rokko.factories.EntityFactory.prototype.loadFromJson = function(name, url, callback, override) {
+rokko.factories.EntityFactory.prototype.loadFromJson = function(url, callback, override) {
     var self = this;
+
     goog.net.XhrIo.send(url, function(e){
         var xhr = /** @type {goog.net.XhrIo} */ (e.target);
-        self.entities[name] = JSON.parse(xhr.getResponseText());
+        var json = goog.json.parse(xhr.getResponseText());
 
-        callback.call(self);
+        for (var i = 0, len = json.entities.length; i < len; i++) {
+            self.entities[json.entities[i].name] = json.entities[i];
+        }
+
+        callback.call(null, self);
     });
 };
 
@@ -46,8 +51,9 @@ rokko.factories.EntityFactory.prototype.make = function(name) {
 
     var entity = this.entities[name];
     var sprites = {};
+
     for (var i = 0, len = entity.sprites.length; i < len; i++) {
-        sprites[i] = this.spriteFac.make([entity.sprites[i]]);
+        sprites[entity.sprites[i]] = this.spriteFac.make([entity.sprites[i]]);
     }
 
     return new rokko.entities.Entity({
@@ -58,7 +64,7 @@ rokko.factories.EntityFactory.prototype.make = function(name) {
             h: entity.entity.height,
             s: entity.entity.scale
         }, new rokko.graphics.AnimatedSprite({
-                defaultFrame: 0,
+                defaultFrame: entity.defFrame,
                 sprites: sprites
             }
         )

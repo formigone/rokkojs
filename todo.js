@@ -7,7 +7,7 @@
 
 /**
  *
- * TODO: Make DrawComponent and RendererComponent non-components
+ * @done: Make DrawComponent and RendererComponent non-components
  *    since they have unique interfaces, which are both different from Component.
  *    Move them to /graphics/ and name them Display and Renderer respectively.
  *
@@ -18,7 +18,7 @@
 
 /**
  *
- * TODO: Make game loop component
+ * @done: Make game loop component
  *
  * @date 2013-10-09
  * @author Rodrigo Silveira
@@ -46,6 +46,15 @@
 /**
  *
  * TODO: /graphics/Display needs a way to removeEntity()
+ *
+ * @date 2013-10-09
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Move component needs a complete keyCode map that includes most useful keyboard codes, as well as Nintendo's controller button codes
  *
  * @date 2013-10-09
  * @author Rodrigo Silveira

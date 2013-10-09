@@ -1,7 +1,6 @@
 goog.provide("rokko.entities.Entity");
 
 goog.require("rokko.components.Component");
-goog.require("rokko.components.DrawComponent");
 
 /**
  * @param {number} pos Position vector

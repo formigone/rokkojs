@@ -8,8 +8,8 @@ goog.require("goog.dom");
  * @constructor
  * @extends {rokko.components.Component}
  */
-rokko.components.RendererComponent = function (drawComponent) {
-    goog.base(this);
+rokko.components.RendererComponent = function (drawComponent, options) {
+    goog.base(this, options);
 
     /** @private */
     /** @type {rokko.components.DrawComponent} */

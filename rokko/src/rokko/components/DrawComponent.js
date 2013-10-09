@@ -8,8 +8,8 @@ goog.require("goog.dom");
  * @constructor
  * @extends {rokko.components.Component}
  */
-rokko.components.DrawComponent = function(width, height, smooth, isDebugMode) {
-    goog.base(this);
+rokko.components.DrawComponent = function(width, height, smooth, isDebugMode, options) {
+    goog.base(this, options);
 
     /** @private */
     /** @type {HTMLCanvasElement} */

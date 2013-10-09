@@ -7,13 +7,12 @@ goog.require("rokko.graphics.Image");
 goog.require("rokko.graphics.SequencedImage");
 goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
+goog.require("rokko.components.MoveComponent");
 goog.require("rokko.factories.SpriteFactory");
 goog.require("rokko.factories.EntityFactory");
 
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
-
-// TODO: implement way to override component methods per instance >> maybe a simple member assign through mutator does the trick??
 
 function main() {
     var canvas = new rokko.components.DrawComponent();
@@ -26,62 +25,35 @@ function main() {
 
     spriteFactory.loadFromJson("/config/megaman.sprites.json", function (factory) {
         entityFactory.loadFromJson("/config/megaman.entity.json", function (factory) {
-            mm = factory.make("megaman");
+            mm = /** @type rokko.entities.Entity */ (factory.make("megaman"));
+
+            var moveComp = new rokko.components.MoveComponent({
+                onExec: function (self, entity) {
+                    var comp = rokko.components.MoveComponent;
+
+                    if (self.keys[comp.KeyCode.KEY_RIGHT]) {
+                        mm.sprite.setSprite("running", true);
+                    } else {
+                        mm.sprite.setSprite("standing", true);
+                    }
+
+                    if (self.keys[comp.KeyCode.KEY_D]) {
+                        canvas.setDebugMode(!canvas.isDebugMode());
+                    }
+                }
+            });
+
+            mm.addComponent(moveComp);
             renderer.addEntity(mm);
             _go(0);
         });
     });
 
     function _go(time) {
+        mm.update();
         renderer.exec(time);
         requestAnimationFrame(_go);
     }
-
-    function keyDown(e) {
-
-        switch (e.keyCode) {
-            case goog.events.KeyCodes.UP:
-                e.preventDefault();
-                if (e.shiftKey) {
-                    mm.sprite.setSprite("spinning", true);
-                } else {
-                    mm.sprite.setSprite("jumping", true);
-                }
-                break;
-
-            case goog.events.KeyCodes.RIGHT:
-                e.preventDefault();
-                if (e.shiftKey) {
-                    mm.sprite.setSprite("running2", true);
-                } else {
-                    mm.sprite.setSprite("running", true);
-                }
-                break;
-
-            case goog.events.KeyCodes.DOWN:
-                e.preventDefault();
-                mm.sprite.setSprite("standing", true);
-                break;
-
-            case goog.events.KeyCodes.D:
-                e.preventDefault();
-                canvas.setDebugMode(!canvas.isDebugMode());
-                break;
-        }
-    };
-
-    function keyUp(e) {
-        var keyEvent = /** @type {goog.events.KeyEvent} */ (e);
-        switch (keyEvent.keyCode) {
-            case goog.events.KeyCodes.UP :
-            case goog.events.KeyCodes.RIGHT:
-                mm.sprite.setSprite("standing", true);
-                break;
-        }
-    };
-
-    goog.events.listen(document.body, goog.events.EventType.KEYDOWN, keyDown);
-    goog.events.listen(document.body, goog.events.EventType.KEYUP, keyUp);
 }
 
 goog.exportSymbol("main", main);

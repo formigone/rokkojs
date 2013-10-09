@@ -68,6 +68,6 @@ rokko.entities.Entity.prototype.update = function() {
     var comps = Object.keys(this.components);
 
     for (var i = 0, len = comps.length; i < len; i++) {
-        this.components[comps[i]].exec(this.components[comps[i]], this);
+        this.components[comps[i]].exec(this);
     }
 };

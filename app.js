@@ -14,46 +14,55 @@ goog.require("rokko.factories.EntityFactory");
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
 
+/**
+ *
+ * TODO: Make DrawComponent and RendererComponent non-components
+ *    since they have unique interfaces, which are both different from Component.
+ *    Move them to /graphics/ and name them Display and Renderer respectively.
+ *
+ */
 function main() {
-    var canvas = new rokko.components.DrawComponent();
-    var renderer = new rokko.components.RendererComponent(canvas);
-    canvas.show(document.body);
+   var canvas = new rokko.components.DrawComponent();
+   var renderer = new rokko.components.RendererComponent(canvas);
+   canvas.show(document.body);
 
-    var mm = null;
-    var spriteFactory = new rokko.factories.SpriteFactory();
-    var entityFactory = new rokko.factories.EntityFactory(spriteFactory);
+   var player = null;
+   var spriteFactory = new rokko.factories.SpriteFactory();
+   var entityFactory = new rokko.factories.EntityFactory(spriteFactory);
 
-    spriteFactory.loadFromJson("/config/megaman.sprites.json", function (factory) {
-        entityFactory.loadFromJson("/config/megaman.entity.json", function (factory) {
-            mm = /** @type rokko.entities.Entity */ (factory.make("megaman"));
+   spriteFactory.loadFromJson("/config/megaman.sprites.json", function (factory) {
+      entityFactory.loadFromJson("/config/megaman.entity.json", function (factory) {
+         player = /** @type rokko.entities.Entity */ (factory.make("megaman"));
 
-            var moveComp = new rokko.components.MoveComponent({
-                onExec: function (self, entity) {
-                    var comp = rokko.components.MoveComponent;
+         var moveComp = new rokko.components.MoveComponent({
+            onExec: function (entity) {
 
-                    if (self.keys[comp.KeyCode.KEY_RIGHT]) {
-                        mm.sprite.setSprite("running", true);
-                    } else {
-                        mm.sprite.setSprite("standing", true);
-                    }
+               // Cache property to avoid access lookup latency
+               var comp = rokko.components.MoveComponent;
 
-                    if (self.keys[comp.KeyCode.KEY_D]) {
-                        canvas.setDebugMode(!canvas.isDebugMode());
-                    }
-                }
-            });
+               if (this.keys[comp.KeyCode.KEY_RIGHT]) {
+                  player.sprite.setSprite("running", true);
+               } else {
+                  player.sprite.setSprite("standing", true);
+               }
 
-            mm.addComponent(moveComp);
-            renderer.addEntity(mm);
-            _go(0);
-        });
-    });
+               if (this.keys[comp.KeyCode.KEY_D]) {
+                  canvas.setDebugMode(!canvas.isDebugMode());
+               }
+            }
+         });
 
-    function _go(time) {
-        mm.update();
-        renderer.exec(time);
-        requestAnimationFrame(_go);
-    }
+         player.addComponent(moveComp);
+         renderer.addEntity(player);
+         gameloop(0);
+      });
+   });
+
+   function gameloop(time) {
+      player.update();
+      renderer.exec(time);
+      requestAnimationFrame(gameloop);
+   }
 }
 
 goog.exportSymbol("main", main);

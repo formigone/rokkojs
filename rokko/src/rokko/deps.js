@@ -5,10 +5,11 @@ goog.addDependency('../../../../rokko/src/rokko/components/DrawComponent.js', ['
 goog.addDependency('../../../../rokko/src/rokko/components/MoveComponent.js', ['rokko.components.MoveComponent'], ['rokko.components.Component']);
 goog.addDependency('../../../../rokko/src/rokko/components/RendererComponent.js', ['rokko.components.RendererComponent'], ['goog.dom', 'rokko.components.Component']);
 goog.addDependency('../../../../rokko/src/rokko/entities/Entity.js', ['rokko.entities.Entity'], ['rokko.components.Component', 'rokko.components.DrawComponent']);
-goog.addDependency('../../../../rokko/src/rokko/factories/EntityFactory.js', ['rokko.factories.EntityFactory'], ['goog.net.XhrIo', 'rokko.graphics.SequencedImage', 'rokko.graphics.Sprite']);
+goog.addDependency('../../../../rokko/src/rokko/factories/EntityFactory.js', ['rokko.factories.EntityFactory'], ['rokko.factories.SpriteFactory']);
 goog.addDependency('../../../../rokko/src/rokko/factories/SpriteFactory.js', ['rokko.factories.SpriteFactory'], ['goog.net.XhrIo', 'rokko.graphics.SequencedImage', 'rokko.graphics.Sprite']);
 goog.addDependency('../../../../rokko/src/rokko/graphics/AnimatedSprite.js', ['rokko.graphics.AnimatedSprite'], ['rokko.graphics.Image', 'rokko.graphics.Sprite']);
+goog.addDependency('../../../../rokko/src/rokko/graphics/Display.js', ['rokko.graphics.Display'], ['goog.dom']);
 goog.addDependency('../../../../rokko/src/rokko/graphics/Image.js', ['rokko.graphics.Image'], ['goog.dom']);
+goog.addDependency('../../../../rokko/src/rokko/graphics/Renderer.js', ['rokko.graphics.Renderer'], ['goog.dom']);
 goog.addDependency('../../../../rokko/src/rokko/graphics/SequencedImage.js', ['rokko.graphics.SequencedImage'], ['rokko.graphics.Image']);
 goog.addDependency('../../../../rokko/src/rokko/graphics/Sprite.js', ['rokko.graphics.Sprite'], ['rokko.graphics.Image']);
-goog.addDependency('../../../../rokko/src/rokko/util/Sprite.js', ['rokko.util.Sprite'], ['goog.dom']);

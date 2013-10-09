@@ -5,8 +5,8 @@ goog.require("rokko.graphics.Sprite");
 goog.require("rokko.graphics.AnimatedSprite");
 goog.require("rokko.graphics.Image");
 goog.require("rokko.graphics.SequencedImage");
-goog.require("rokko.components.DrawComponent");
-goog.require("rokko.components.RendererComponent");
+goog.require("rokko.graphics.Display");
+goog.require("rokko.graphics.Renderer");
 goog.require("rokko.components.MoveComponent");
 goog.require("rokko.factories.SpriteFactory");
 goog.require("rokko.factories.EntityFactory");
@@ -14,16 +14,9 @@ goog.require("rokko.factories.EntityFactory");
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
 
-/**
- *
- * TODO: Make DrawComponent and RendererComponent non-components
- *    since they have unique interfaces, which are both different from Component.
- *    Move them to /graphics/ and name them Display and Renderer respectively.
- *
- */
 function main() {
-   var canvas = new rokko.components.DrawComponent();
-   var renderer = new rokko.components.RendererComponent(canvas);
+   var canvas = new rokko.graphics.Display();
+   var renderer = new rokko.graphics.Renderer(canvas);
    canvas.show(document.body);
 
    var player = null;
@@ -60,7 +53,7 @@ function main() {
 
    function gameloop(time) {
       player.update();
-      renderer.exec(time);
+      renderer.render(time);
       requestAnimationFrame(gameloop);
    }
 }

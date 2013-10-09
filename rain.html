@@ -54,9 +54,11 @@
 </style>
 
 <h1>HTML5 Canvas 2D API Suggestion: <span>Custom Shader</span></h1>
+
 <div id="demo"></div>
 <div id="ctrls"></div>
-<p>Copyright &copy; 2013 <a href="http://www.rodrigo-silveira.com">Rodrigo Silveira</a>. All rights reserved. Mega Man is an awesome game, and all its rights, trademarks, etc. are property of Capcom.</p>
+<p>Copyright &copy; 2013 <a href="http://www.rodrigo-silveira.com">Rodrigo Silveira</a>. All rights reserved. Mega Man
+    is an awesome game, and all its rights, trademarks, etc. are property of Capcom.</p>
 
 <script>
 /**
@@ -71,14 +73,13 @@
  */
 
 
-
 /**
  * Make it so references to this function kind of look like a GLSL file
  *
  * @type {Object.<string, Function>}
  */
 var allBlackShader = {};
-allBlackShader.glsl = function() {
+allBlackShader.glsl = function () {
     var img = this.getImageData(0, 0, WIDTH, HEIGHT);
     var data = img.data;
 
@@ -94,7 +95,7 @@ allBlackShader.glsl = function() {
 };
 
 var allWhiteShader = {};
-allWhiteShader.glsl = function() {
+allWhiteShader.glsl = function () {
     var img = this.getImageData(0, 0, WIDTH, HEIGHT);
     var data = img.data;
 
@@ -110,7 +111,7 @@ allWhiteShader.glsl = function() {
 };
 
 var defShader = {};
-defShader.glsl = function() {
+defShader.glsl = function () {
     return 0;
 };
 
@@ -157,7 +158,7 @@ CanvasRenderingContext2D.prototype["-rokko-customShader"] = defShader;
  * The dream is that each draw call on the ctx instance would be done using whatever program is currently bound
  *
  */
-CanvasRenderingContext2D.prototype.runCustomShader = function() {
+CanvasRenderingContext2D.prototype.runCustomShader = function () {
     this["-rokko-customShader"].call(this);
 };
 
@@ -168,15 +169,14 @@ CanvasRenderingContext2D.prototype.runCustomShader = function() {
  * @param {null} vertexShader
  * @returns {number}
  */
-CanvasRenderingContext2D.prototype.compileCustomShader = function(fragmentShader, vertexShader) {
+CanvasRenderingContext2D.prototype.compileCustomShader = function (fragmentShader, vertexShader) {
     CanvasRenderingContext2D.customShaderPrograms.push(fragmentShader);
     return CanvasRenderingContext2D.customShaderPrograms.length - 1;
 };
 
-CanvasRenderingContext2D.prototype.bindCustomShader = function(shaderProgram) {
+CanvasRenderingContext2D.prototype.bindCustomShader = function (shaderProgram) {
     this["-rokko-customShader"] = shaderProgram;
 };
-
 
 
 var WIDTH = 800;
@@ -322,10 +322,28 @@ function main() {
     var lastTime = 0;
     var freq = 1000 / 30;
 
+    var soundFX = {
+        rain: new Audio("/sound/rain.mp3"),
+        thunder: [
+            new Audio("/sound/thunder2.mp3"),
+            new Audio("/sound/thunder3.mp3")
+        ]
+    };
+    soundFX.rain.loop = true;
+
     var btnThunder = document.createElement("button");
     btnThunder.textContent = "Thunder";
     btnThunder.addEventListener("click", function () {
         doThunder = !doThunder;
+        if (doThunder) {
+            soundFX.thunder[0].currentTime = 0.40;
+            soundFX.thunder[0].volume = 1.00;
+            soundFX.thunder[0].play();
+            doThunder = false;
+            setTimeout(function(){
+                doThunder = true;
+            }, 500);
+        }
     }, false);
 
     var btnRun = document.createElement("button");
@@ -392,6 +410,9 @@ function main() {
             requestAnimationFrame(render);
         }
     }
+
+    soundFX.rain.volume = 0.5;
+    soundFX.rain.play();
 
     render(0);
 }

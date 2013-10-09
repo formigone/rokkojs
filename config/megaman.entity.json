@@ -3,11 +3,11 @@
         {
             "name": "megaman",
             "entity": {
-                "x": 300,
+                "x": 150,
                 "y": 150,
                 "width": null,
                 "height": null,
-                "scale": 3.5
+                "scale": 7
             },
             "sprites": [
                 "standing", "running", "running2", "jumping", "spinning"

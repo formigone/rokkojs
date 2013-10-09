@@ -23,24 +23,7 @@ var soundFX = {
 };
 var thunder = 0;
 
-//// TODO: create objects to manage this life cycle. Maybe we first check if the config file is cached. If not, fetch it. Once fetched, run overloaded exec method (**Component** ??) and load everyone, and do whatever is needed with them
-//function genSprite(type, name, cb) {
-//    var url = "/config/genSprite.php?type=";
-//
-//    goog.net.XhrIo.send(url + type, function(e){
-//        var response = e.target.getResponseText();
-//        var data = JSON.parse(response);
-//
-//        var img = new rokko.graphics.SequencedImage(data[name].img, {
-//            frames: data[name].frames,
-//            freq: data[name].freq,
-//            currFrame: data[name].currFrame
-//        });
-//
-//        var sprite = new rokko.graphics.Sprite(img);
-//        cb(sprite);
-//    });
-//}
+// TODO: implement way to override component methods per instance >> maybe a simple member assign through mutator does the trick??
 
 function main() {
     var canvas = new rokko.components.DrawComponent();

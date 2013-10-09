@@ -94,7 +94,7 @@ GameLoopComponent: Component = {
    onDraw: function(number[time]),
 }
 
-@inherits goog.events.KeyCodes
+@ref goog.events.KeyCodes
 MoveComponent.KeyCode = {
     KEY_XYZ,
     GAMEPAD_BTN

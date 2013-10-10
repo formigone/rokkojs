@@ -121,3 +121,14 @@ Vec2 = {
    getComponents: function:{x:number, y:number})
    set: function(number[x], number[y])
 }
+
+@Managers
+
+EntityManager = {
+   // @type {Object.<string, Array>} Store entities into groups. Ex: players[], enemies[], items[]
+   entities: {},
+   add: function(Entity|Array.<Entity>, string),
+   remove: function(Entity, string),
+   // @return {Array}
+   getGroup: function(string)
+}

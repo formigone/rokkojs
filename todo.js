@@ -27,10 +27,19 @@
 
 /**
  *
+ * TODO: Make EntityManager class, then modify components to take a reference to one in ::exec()
+ *
+ * @date 2013-10-10
+ * @author Rodrigo SIlveira
+ *
+ */
+
+/**
+ *
  * TODO: Make Vector util class in /math/ package
  *
  * @date 2013-10-09
- * @author YourName
+ * @author Rodrigo SIlveira
  *
  */
 
@@ -39,7 +48,7 @@
  * TODO: Make map object and a map renderer to go along with it
  *
  * @date 2013-10-09
- * @author YourName
+ * @author Rodrigo SIlveira
  *
  */
 
@@ -66,6 +75,6 @@
  * TODO: Write something useful here
  *
  * @date 2013-10-09
- * @author YourName
+ * @author Rodrigo SIlveira
  *
  */

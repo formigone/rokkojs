@@ -12,3 +12,4 @@ goog.addDependency('../../../../rokko/src/rokko/graphics/Image.js', ['rokko.grap
 goog.addDependency('../../../../rokko/src/rokko/graphics/Renderer.js', ['rokko.graphics.Renderer'], ['goog.dom']);
 goog.addDependency('../../../../rokko/src/rokko/graphics/SequencedImage.js', ['rokko.graphics.SequencedImage'], ['rokko.graphics.Image']);
 goog.addDependency('../../../../rokko/src/rokko/graphics/Sprite.js', ['rokko.graphics.Sprite'], ['rokko.graphics.Image']);
+goog.addDependency('../../../../rokko/src/rokko/managers/EntityManager.js', ['rokko.managers.EntityManager'], []);

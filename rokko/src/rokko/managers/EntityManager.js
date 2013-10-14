@@ -34,6 +34,7 @@ rokko.managers.EntityManager.prototype.add = function(entity, group) {
  *
  * @param {rokko.entities.Entity} entity
  * @param {string} group
+ * @return {boolean}
  */
 rokko.managers.EntityManager.prototype.remove = function(entity, group) {
    if (goog.isArray(this.entities[group])) {
@@ -55,4 +56,32 @@ rokko.managers.EntityManager.prototype.remove = function(entity, group) {
    }
 
    return false;
+};
+
+/**
+ *
+ * Remove an entire group of entities
+ *
+ * @param {string} group
+ * @return {boolean}
+ */
+rokko.managers.EntityManager.prototype.removeGroup = function(group) {
+   if (goog.isArray(this.entities[group])) {
+      delete this.entities[group];
+
+      return true;
+   }
+
+   return false;
+};
+
+/**
+ *
+ * Get an entire group of entities
+ *
+ * @param {string} group
+ * @return {Array}
+ */
+rokko.managers.EntityManager.prototype.getGroup = function(group) {
+   return this.entities[group] || [];
 };

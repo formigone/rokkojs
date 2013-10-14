@@ -27,6 +27,46 @@ See the COPYING file for details.
         assertTrue("Entity loaded", goog.isObject(ent));
         assertTrue("EntityManager loaded", goog.isObject(man));
     }
+
+    function testRemovingNothing() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        assertFalse("Removing from non-group", man.remove(ent, ""));
+        assertFalse("Removing from group", man.remove(ent, "some-group"));
+    }
+
+    function testRemovingStuff() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        man.add(ent, "hero");
+
+        assertTrue("Removing from non-group", man.remove(ent, "hero"));
+
+        var total = man.getGroup("hero");
+        assertTrue("Should have zero entities in group", total == 0);
+
+        man.add(ent, "hero");
+        total = man.getGroup("villain");
+        assertTrue("Should have zero entities in this group, too", total == 0);
+    }
+
+    function testAddingStuff() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        man.add(ent, "hero");
+
+        assertTrue("Removing from non-group", man.remove(ent, "hero"));
+
+        var total = man.getGroup("hero");
+        assertTrue("Should have zero entities in group", total == 0);
+
+        man.add(ent, "hero");
+        total = man.getGroup("villain");
+        assertTrue("Should have zero entities in this group, too", total == 0);
+    }
 </script>
 </body>
 </html>

@@ -27,10 +27,118 @@
 
 /**
  *
+ * TODO: Unit test entities/entity
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test components/component
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test components/GameLoopComponent
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test components/MoveComponent
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test factories/EntityFactory
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test factories/SpriteFactory
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test graphics/AnimatedSprite
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test graphics/Display
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test graphics/Image
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test graphics/Renderer
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test graphics/SequencedImage
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Unit test graphics/Sprite
+ *
+ * @date 2013-10-14
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
  * TODO: Make EntityManager class, then modify components to take a reference to one in ::exec()
  *
  * @date 2013-10-10
- * @author Rodrigo SIlveira
+ * @author Rodrigo Silveira
  *
  */
 
@@ -39,7 +147,7 @@
  * TODO: Make Vector util class in /math/ package
  *
  * @date 2013-10-09
- * @author Rodrigo SIlveira
+ * @author Rodrigo Silveira
  *
  */
 
@@ -48,7 +156,7 @@
  * TODO: Make map object and a map renderer to go along with it
  *
  * @date 2013-10-09
- * @author Rodrigo SIlveira
+ * @author Rodrigo Silveira
  *
  */
 
@@ -75,6 +183,6 @@
  * TODO: Write something useful here
  *
  * @date 2013-10-09
- * @author Rodrigo SIlveira
+ * @author Rodrigo Silveira
  *
  */

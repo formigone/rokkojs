@@ -1,6 +1,7 @@
 goog.provide("rokko.components.MoveComponent");
 
 goog.require("rokko.components.Component");
+goog.require("goog.events");
 
 /**
  *

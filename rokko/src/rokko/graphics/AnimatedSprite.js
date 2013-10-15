@@ -9,6 +9,9 @@ goog.require("rokko.graphics.Sprite");
  * @constructor
  */
 rokko.graphics.AnimatedSprite = function(options) {
+
+   options = options || {};
+
     /** @protected */
     this.defFrame = options.defaultFrame;
 

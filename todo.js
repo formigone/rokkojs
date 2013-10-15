@@ -180,7 +180,7 @@
 
 /**
  *
- * TODO: Write something useful here
+ * TODO: boilerplate task to do block
  *
  * @date 2013-10-09
  * @author Rodrigo Silveira

@@ -13,6 +13,8 @@ goog.require("rokko.components.Component");
 rokko.components.GameLoopComponent = function (fps, options) {
    goog.base(this, options);
 
+   options = options || {};
+
    if (goog.isDefAndNotNull(options.onUpdate) && goog.isFunction(options.onUpdate)) {
       this.onUpdate = options.onUpdate;
    }

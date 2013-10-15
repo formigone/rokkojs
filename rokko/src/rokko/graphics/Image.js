@@ -13,6 +13,8 @@ rokko.graphics.Image = function(img, options) {
     /** @type {HTMLImageElement} */
     this.img = goog.dom.createDom("img", {src: img});
 
+   options = options || {};
+
     /** @protected */
     this.pos = options.pos;
 

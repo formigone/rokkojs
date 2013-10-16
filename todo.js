@@ -153,9 +153,18 @@
 
 /**
  *
- * TODO: Update entities and components to use Vec2
+ * @done: Update entities and components to use Vec2
  *
  * @date 2013-10-15
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Set up compilation sandbox --with a source map-- and make sure project compiles from time to time.
+ *
+ * @date 2013-10-16
  * @author Rodrigo Silveira
  *
  */

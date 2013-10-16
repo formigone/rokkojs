@@ -5,4 +5,5 @@
  --output_mode=compiled \
  --compiler_jar=/usr/local/google-closure/compiler.jar \
  --compiler_flags="--compilation_level=ADVANCED_OPTIMIZATIONS" \
- > out/app.comp.js
+ --compiler_flags="--create_source_map=app.min.js.map" \
+ > app.comp.js

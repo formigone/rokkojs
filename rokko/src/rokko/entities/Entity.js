@@ -28,8 +28,10 @@ rokko.entities.Entity = function (pos, size, sprite, options) {
    /** @protected */
    this.size = size;
 
-   /** @protected */
-   /** @type {rokko.graphics.AnimatedSprite} */
+   /**
+    * @protected
+    * @type {rokko.graphics.AnimatedSprite}
+    */
    this.sprite = sprite;
 
    /** @protected */

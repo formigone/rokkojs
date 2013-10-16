@@ -9,5 +9,7 @@
  > app.comp.js
 
 echo "//# sourceMappingURL=app.comp.js.map" >> app.comp.js
+
+# --compiler_flags="--warning_level=VERBOSE" \
 # add to sourcemap:             "sourceRoot":"../",
 # add to bottom of app.comp.js: //# sourceMappingURL=app.comp.js.map

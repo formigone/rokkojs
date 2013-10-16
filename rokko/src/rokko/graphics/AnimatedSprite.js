@@ -12,21 +12,21 @@ rokko.graphics.AnimatedSprite = function(options) {
    options = options || {};
 
     /** @protected */
-    this.defFrame = options["defaultFrame"];
+    this.defFrame = options.defaultFrame;
 
     /** @protected */
-    this.frame = options["defaultFrame"];
+    this.frame = options.defaultFrame;
 
     /**
      * @protected
      * @type {Object<rokko.graphics.Sprite>}
      */
-    this.sprites = options["sprites"];
+    this.sprites = options.sprites;
 };
 
 rokko.graphics.AnimatedSprite.prototype.setSprite = function(frame, inheritKeyframe) {
     inheritKeyframe = inheritKeyframe || false;
-
+console.log(this);
     var keyFrame = 0;
     var sprite = this.sprites[this.frame].getImage();
 

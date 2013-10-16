@@ -4,6 +4,11 @@ goog.provide("rokko.math.Vec2");
 rokko._Vec2;
 
 /**
+ * @typedef {{w: number, h: number, s: number}}
+ */
+rokko._Size;
+
+/**
  *
  * @constructor
  */
@@ -17,6 +22,7 @@ rokko.math.Vec2 = function(x, y) {
 
 /**
  * Simple way to convert two numbers into a standard object that Vec2 can work with
+ *
  * @param {number} x
  * @param {number} y
  * @return {rokko._Vec2}

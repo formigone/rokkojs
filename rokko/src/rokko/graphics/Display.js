@@ -14,7 +14,7 @@ rokko.graphics.Display = function (width, height, smooth, isDebugMode) {
    /** @private */
    /** @type {CanvasRenderingContext2D} */
    this.ctx = this.canvas.getContext("2d");
-   this.ctx.webkitImageSmoothingEnabled = smooth || false;
+   this.ctx["webkitImageSmoothingEnabled"] = smooth || false;
    this.__RENDER_DEBUGGING_MODE__ = isDebugMode || false;
 };
 
@@ -27,18 +27,18 @@ rokko.graphics.Display.prototype.render = function (entity, time) {
    var imgSize = img.getSize();
 
    this.ctx.drawImage(el,
-      imgPos.x, imgPos.y,
-      imgSize.w, imgSize.h,
-      enPos.x, enPos.y,
-      imgSize.w * enSize.s,
-      imgSize.h * enSize.s
+      imgPos["x"], imgPos["y"],
+      imgSize["w"], imgSize["h"],
+      enPos["x"], enPos["y"],
+      imgSize["w"] * enSize["s"],
+      imgSize["h"] * enSize["s"]
    );
 
    // DEBUGGING;
    if (this.__RENDER_DEBUGGING_MODE__) {
       this.ctx.strokeStyle = "#cc0000";
       this.ctx.beginPath();
-      this.ctx.rect(entity.pos.x, entity.pos.y, entity.size.w || (size.w * entity.size.s), entity.size.h || (size.h * entity.size.s));
+      this.ctx.rect(enPos.x, enPos.y, enSize.w || (imgSize.w * enSize.s), enSize.h || (imgSize.h * enSize.s));
       this.ctx.stroke();
    }
 };

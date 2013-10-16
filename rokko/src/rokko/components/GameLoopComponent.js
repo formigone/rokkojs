@@ -5,7 +5,7 @@ goog.require("rokko.components.Component");
 /**
  *
  * @param {number} fps
- * @param {Array} options
+ * @param {?Object} options
  *
  * @constructor
  * @extends {rokko.components.Component}

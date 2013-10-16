@@ -27,6 +27,17 @@
 
 /**
  *
+ * TODO: Rewrite entity and sprite factories
+ *    so they manually create each object from the input file. This way properties can be renamed at compile time,
+ *    and no undefined symbol errors will be raised.
+ *
+ * @date 2013-10-16
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
  * TODO: Unit test entities/entity
  *
  * @date 2013-10-14

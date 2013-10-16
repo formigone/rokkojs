@@ -2,6 +2,7 @@ goog.provide("rokko.components.Component");
 
 /**
  *
+ * @param {?Object} options
  * @constructor
  */
 rokko.components.Component = function (options) {

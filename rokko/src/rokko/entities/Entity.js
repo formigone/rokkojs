@@ -4,11 +4,6 @@ goog.require("rokko.components.Component");
 goog.require("rokko.math.Vec2");
 
 /**
- * @typedef {{w: number, h: number, s: number}}
- */
-rokko._Size;
-
-/**
  * @param {rokko.math.Vec2} pos Position vector
  * @param {rokko._Size} size Size vector
  * @param {rokko.graphics.Sprite} sprite Sprite

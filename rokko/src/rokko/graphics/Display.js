@@ -19,12 +19,14 @@ rokko.graphics.Display = function (width, height, smooth, isDebugMode) {
 };
 
 rokko.graphics.Display.prototype.render = function (entity, time) {
+   var enPos = entity.getPos();
+   var enSize = entity.getSize();
    var img = entity.sprite.getImage();
    var el = img.getElement(time);
-   var pos = img.getPos();
-   var size = img.getSize();
+   var imgPos = img.getPos();
+   var imgSize = img.getSize();
 
-   this.ctx.drawImage(el, pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, size.w * entity.size.s, size.h * entity.size.s);
+   this.ctx.drawImage(el, imgPos.x, imgPos.y, imgSize.w, imgSize.h, enPos.x, enPos.y, imgSize.w * enSize.s, imgSize.h * enSize.s);
 
    // DEBUGGING;
    if (this.__RENDER_DEBUGGING_MODE__) {

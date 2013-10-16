@@ -1,10 +1,16 @@
 goog.provide("rokko.entities.Entity");
 
 goog.require("rokko.components.Component");
+goog.require("rokko.math.Vec2");
 
 /**
- * @param {number} pos Position vector
- * @param {number} size Size vector
+ * @typedef {{w: number, h: number, s: number}}
+ */
+rokko._Size;
+
+/**
+ * @param {rokko.math.Vec2} pos Position vector
+ * @param {rokko._Size} size Size vector
  * @param {rokko.graphics.Sprite} sprite Sprite
  * @param {Object} options
  *
@@ -36,6 +42,7 @@ rokko.entities.Entity = function (pos, size, sprite, options) {
 /**
  *
  * Keep track of how many entities have been created, but most importantly, provide a mechanism whereby every entity can have a unique ID
+ *
  * @type {number}
  */
 rokko.entities.Entity.getNextId = (function() {
@@ -46,6 +53,26 @@ rokko.entities.Entity.getNextId = (function() {
    };
 })();
 
+/**
+ *
+ * @returns {rokko.math.Vec2}
+ */
+rokko.entities.Entity.prototype.getPos = function () {
+   return this.pos;
+};
+
+/**
+ *
+ * @returns {rokko.math.Vec2}
+ */
+rokko.entities.Entity.prototype.getSize = function () {
+   return this.size;
+};
+
+/**
+ *
+ * @returns {rokko.components.Component}
+ */
 rokko.entities.Entity.prototype.getComponents = function () {
    return this.components;
 };

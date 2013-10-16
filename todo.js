@@ -144,9 +144,18 @@
 
 /**
  *
- * TODO: Make Vector util class in /math/ package
+ * @done: Make Vector util class in /math/ package
  *
  * @date 2013-10-09
+ * @author Rodrigo Silveira
+ *
+ */
+
+/**
+ *
+ * TODO: Update entities and components to use Vec2
+ *
+ * @date 2013-10-15
  * @author Rodrigo Silveira
  *
  */

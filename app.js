@@ -26,16 +26,16 @@ function main() {
    });
 
    var canvas = new rokko.graphics.Display();
-   var renderer = new rokko.graphics.Renderer(canvas);
    canvas.show(document.body);
+   var renderer = new rokko.graphics.Renderer(canvas);
 
    var player = null;
    var spriteFactory = new rokko.factories.SpriteFactory();
    var entityFactory = new rokko.factories.EntityFactory(spriteFactory);
 
-   spriteFactory.loadFromJson("/config/megaman.sprites.json", function (factory) {
-      entityFactory.loadFromJson("/config/megaman.entity.json", function (factory) {
-         player = /** @type rokko.entities.Entity */ (factory.make("megaman"));
+   spriteFactory.loadFromJson("/config/megaman.sprites.json", function (spriteFactory) {
+      entityFactory.loadFromJson("/config/megaman.entity.json", function (entFactory) {
+         player = /** @type rokko.entities.Entity */ (entFactory.make("megaman"));
 
          var moveComp = new rokko.components.MoveComponent({
             onExec: function (entity) {

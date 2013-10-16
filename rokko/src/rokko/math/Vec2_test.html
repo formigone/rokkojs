@@ -21,7 +21,42 @@ See the COPYING file for details.
 
     function testStuffLoading() {
         var clazz = new rokko.math.Vec2();
+
         assertTrue("Class loaded loaded", goog.isObject(clazz));
+    }
+
+    function testOptionalParamsInConstructor() {
+        var x = 10;
+        var y = null;
+        var vec2 = new rokko.math.Vec2(10);
+
+        var comps = vec2.getComps();
+
+        assertTrue("Should equal (" + x + ", " + 0 + ")", comps.x == x && comps.y == 0);
+    }
+
+    function testAdding() {
+        var vec2A = new rokko.math.Vec2(1, 1);
+        var vec2B = new rokko.math.Vec2(2, 2);
+
+        vec2A.add(vec2A);
+
+        assertTrue("Should equal (2, 2)", vec2A.equals(vec2B));
+
+        vec2B.add(rokko.math.Vec2.make(0, 0));
+        assertTrue("Should equal (2, 2)", vec2A.equals(rokko.math.Vec2.make(2, 2)));
+    }
+
+    function testNormalizing() {
+        var vec2 = new rokko.math.Vec2(1, 1);
+
+        vec2.normalize();
+        var comps = vec2.getComps();
+        var x = parseInt(comps.x + 0.1);
+        var y = parseInt(comps.y + 0.1);
+
+        assertTrue("Should equal about 1", x == parseInt(comps.x + 0.1));
+        assertTrue("Should equal about 1", y == parseInt(comps.y + 0.1));
     }
 </script>
 </body>

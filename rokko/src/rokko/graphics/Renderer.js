@@ -7,12 +7,16 @@ goog.require("goog.dom");
  * @constructor
  */
 rokko.graphics.Renderer = function (display) {
-   /** @private */
-   /** @type {rokko.graphics.Display} */
+   /**
+    *  @private
+    *  @type {rokko.graphics.Display}
+    */
    this.display = display;
 
-   /** @private */
-   /** @type {rokko.entities.Entity} */
+   /**
+    * @private
+    * @type {rokko.entities.Entity}
+    */
    this.entities = [];
 
    /** @experimental */

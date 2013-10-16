@@ -35,7 +35,7 @@ rokko.entities.Entity = function (pos, size, sprite, options) {
    this.sprite = sprite;
 
    /** @protected */
-   this.state = options.state || rokko.entities.Entity.EntityState.STANDING_RIGHT;
+   this.state = options["state"] || rokko.entities.Entity.EntityState.STANDING_RIGHT;
 
    /** @protected */
    this.ID = rokko.entities.Entity.getNextId();

@@ -5,5 +5,9 @@
  --output_mode=compiled \
  --compiler_jar=/usr/local/google-closure/compiler.jar \
  --compiler_flags="--compilation_level=ADVANCED_OPTIMIZATIONS" \
- --compiler_flags="--create_source_map=app.min.js.map" \
+ --compiler_flags="--create_source_map=app.comp.js.map" \
  > app.comp.js
+
+echo "//# sourceMappingURL=app.comp.js.map" >> app.comp.js
+# add to sourcemap:             "sourceRoot":"../",
+# add to bottom of app.comp.js: //# sourceMappingURL=app.comp.js.map

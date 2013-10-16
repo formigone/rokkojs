@@ -28,10 +28,10 @@ rokko.factories.SpriteFactory.prototype.loadFromJson = function (url, callback, 
     var self = this;
     goog.net.XhrIo.send(url, function (e) {
         var xhr = /** @type {goog.net.XhrIo} */ (e.target);
-        var json = goog.json.parse(xhr.getResponseText());
+        var json = xhr.getResponseJson();
 
-        for (var i = 0, len = json.sprites.length; i < len; i++) {
-            self.sprites[json.sprites[i].name] = json.sprites[i];
+        for (var i = 0, len = json["sprites"].length; i < len; i++) {
+            self.sprites[json["sprites"][i].name] = json["sprites"][i];
         }
 
         callback.call(null, self);

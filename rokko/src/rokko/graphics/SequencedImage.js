@@ -10,28 +10,28 @@ goog.require("rokko.graphics.Image");
  */
 rokko.graphics.SequencedImage = function (img, options) {
    options = options || {};
-   options.frames = options.frames || [];
+   options.frames = options["frames"] || [];
 
-   rokko.graphics.Image.call(this, img, options.frames[0]);
-
-   /** @type {number} */
-   /** @protected */
-   this.freq = options.freq;
+   rokko.graphics.Image.call(this, img, options["frames"][0]);
 
    /** @type {number} */
    /** @protected */
-   this.currFrame = options.currFrame || 0;
+   this.freq = options["freq"];
+
+   /** @type {number} */
+   /** @protected */
+   this.currFrame = options["currFrame"] || 0;
 
    /** @type {number} */
    /** @protected */
    this.lastTime = 0;
 
    /** @protected */
-   this.frames = options.frames;
+   this.frames = options["frames"];
 
    /** @protected */
    /** @type {boolean} */
-   this.loop = options.loop || true;
+   this.loop = options["loop"] || true;
 };
 goog.inherits(rokko.graphics.SequencedImage, rokko.graphics.Image);
 
@@ -49,11 +49,11 @@ rokko.graphics.SequencedImage.prototype.getElement = function (time) {
 };
 
 rokko.graphics.SequencedImage.prototype.getPos = function () {
-   return this.frames[this.currFrame].pos;
+   return this.frames[this.currFrame]["pos"];
 };
 
 rokko.graphics.SequencedImage.prototype.getSize = function () {
-   return this.frames[this.currFrame].size;
+   return this.frames[this.currFrame]["size"];
 };
 
 rokko.graphics.SequencedImage.prototype.getFrame = function () {

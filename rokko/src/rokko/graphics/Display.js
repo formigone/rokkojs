@@ -26,7 +26,13 @@ rokko.graphics.Display.prototype.render = function (entity, time) {
    var imgPos = img.getPos();
    var imgSize = img.getSize();
 
-   this.ctx.drawImage(el, imgPos.x, imgPos.y, imgSize.w, imgSize.h, enPos.x, enPos.y, imgSize.w * enSize.s, imgSize.h * enSize.s);
+   this.ctx.drawImage(el,
+      imgPos.x, imgPos.y,
+      imgSize.w, imgSize.h,
+      enPos.x, enPos.y,
+      imgSize.w * enSize.s,
+      imgSize.h * enSize.s
+   );
 
    // DEBUGGING;
    if (this.__RENDER_DEBUGGING_MODE__) {

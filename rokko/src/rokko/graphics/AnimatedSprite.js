@@ -9,18 +9,19 @@ goog.require("rokko.graphics.Sprite");
  * @constructor
  */
 rokko.graphics.AnimatedSprite = function(options) {
-
    options = options || {};
 
     /** @protected */
-    this.defFrame = options.defaultFrame;
+    this.defFrame = options["defaultFrame"];
 
     /** @protected */
-    this.frame = this.defFrame;
+    this.frame = options["defaultFrame"];
 
-    /** @protected */
-    /** @type {Object<rokko.graphics.Sprite>} */
-    this.sprites = options.sprites;
+    /**
+     * @protected
+     * @type {Object<rokko.graphics.Sprite>}
+     */
+    this.sprites = options["sprites"];
 };
 
 rokko.graphics.AnimatedSprite.prototype.setSprite = function(frame, inheritKeyframe) {

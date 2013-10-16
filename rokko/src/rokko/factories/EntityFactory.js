@@ -28,10 +28,10 @@ rokko.factories.EntityFactory.prototype.loadFromJson = function (url, callback, 
 
    goog.net.XhrIo.send(url, function (e) {
       var xhr = /** @type {goog.net.XhrIo} */ (e.target);
-      var json = goog.json.parse(xhr.getResponseText());
+      var json = xhr.getResponseJson();
 
-      for (var i = 0, len = json.entities.length; i < len; i++) {
-         self.entities[json.entities[i].name] = json.entities[i];
+      for (var i = 0, len = json["entities"].length; i < len; i++) {
+         self.entities[json["entities"][i]["name"]] = json["entities"][i];
       }
 
       callback.call(null, self);
@@ -51,22 +51,23 @@ rokko.factories.EntityFactory.prototype.make = function (name) {
 
    var entity = this.entities[name];
    var sprites = {};
+   var size = {};
+   size["w"] = entity["entity"]["width"];
+   size["h"] = entity["entity"]["height"];
+   size["s"] = entity["entity"]["scale"];
 
-   for (var i = 0, len = entity.sprites.length; i < len; i++) {
-      sprites[entity.sprites[i]] = this.spriteFac.make([entity.sprites[i]]);
+   for (var i = 0, len = entity["sprites"].length; i < len; i++) {
+      sprites[entity["sprites"][i]] = this.spriteFac.make([entity["sprites"][i]]);
    }
 
    return new rokko.entities.Entity(
       new rokko.math.Vec2(
-         entity.entity.x,
-         entity.entity.y
-      ), {
-         w: entity.entity.width,
-         h: entity.entity.height,
-         s: entity.entity.scale
-      }, new rokko.graphics.AnimatedSprite({
-            defaultFrame: entity.defFrame,
-            sprites: sprites
+         entity["entity"]["x"],
+         entity["entity"]["y"]
+      ), size,
+      new rokko.graphics.AnimatedSprite({
+            "defaultFrame": entity["defFrame"],
+            "sprites": sprites
          }
       )
    );

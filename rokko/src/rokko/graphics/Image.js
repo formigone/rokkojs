@@ -16,10 +16,10 @@ rokko.graphics.Image = function(img, options) {
    options = options || {};
 
     /** @protected */
-    this.pos = options.pos;
+    this.pos = options["pos"];
 
     /** @protected */
-    this.size = options.size;
+    this.size = options["size"];
 };
 
 /**

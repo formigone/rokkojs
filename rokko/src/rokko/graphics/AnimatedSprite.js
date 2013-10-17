@@ -26,7 +26,7 @@ rokko.graphics.AnimatedSprite = function(options) {
 
 rokko.graphics.AnimatedSprite.prototype.setSprite = function(frame, inheritKeyframe) {
     inheritKeyframe = inheritKeyframe || false;
-console.log(this);
+
     var keyFrame = 0;
     var sprite = this.sprites[this.frame].getImage();
 

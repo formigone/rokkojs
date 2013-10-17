@@ -7,12 +7,13 @@ goog.require("rokko.graphics.Image");
  * @param {string} img
  * @param {Object} options
  * @constructor
+ * @extends {rokko.graphics.Image}
  */
 rokko.graphics.SequencedImage = function (img, options) {
    options = options || {};
    options.frames = options.frames || [];
 
-   rokko.graphics.Image.call(this, img, options.frames[0]);
+   rokko.graphics.Image.call(/** @type {rokko.graphics.Image} */ (this), img, options.frames[0]);
 
    /** @type {number} */
    /** @protected */
@@ -49,11 +50,11 @@ rokko.graphics.SequencedImage.prototype.getElement = function (time) {
 };
 
 rokko.graphics.SequencedImage.prototype.getPos = function () {
-   return this.frames[this.currFrame]["pos"];
+   return this.frames[this.currFrame].pos;
 };
 
 rokko.graphics.SequencedImage.prototype.getSize = function () {
-   return this.frames[this.currFrame]["size"];
+   return this.frames[this.currFrame].size;
 };
 
 rokko.graphics.SequencedImage.prototype.getFrame = function () {

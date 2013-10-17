@@ -34,7 +34,8 @@ rokko.math.Vec2.make = function(x, y) {
 /**
  * Maybe this shouldn't be allowed?
  *
- * @param {rokko._Vec2|rokko.math.Vec2} vec2
+ * @param {number} x
+ * @param {number} y
  * @return {rokko.math.Vec2} Return itself to allow chaining
  */
 rokko.math.Vec2.prototype.set = function(x, y) {
@@ -70,7 +71,7 @@ rokko.math.Vec2.prototype.subtract = function(vec2) {
 
 /**
  *
- * @param {rokko._Vec2}|rokko.math.Vec2} vec2
+ * @param {rokko._Vec2|rokko.math.Vec2} vec2
  * @return {number}
  */
 rokko.math.Vec2.prototype.dot = function(vec2) {

@@ -132,3 +132,28 @@ EntityManager = {
    // @return {Array}
    getGroup: function(string)
 }
+
+@Map
+
+Map = {
+   tiles: [{Map.Tile}/* Width x Height */],
+   TileCode: {{string: number}},
+   width: number,
+   height: number,
+   tileWidth: number,
+   tileHeight: number,
+   getTile: function(x{number}, y{number})
+}
+
+Map.Tile = {
+   texture: {Map.TileTexture},
+   code: {Map.TileCode},
+}
+
+Map.TileTexture = {
+   img: HTMLImageElement,
+   x: number,
+   y: number,
+   width: number,
+   height: number
+}

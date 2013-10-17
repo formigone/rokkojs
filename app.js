@@ -17,6 +17,16 @@ goog.require("goog.net.XhrIo");
 
 function main() {
 
+   goog.net.XhrIo.send("/config/simple.map.json", function(e){
+      var xhr = /** @type {goog.net.XhrIo} */ (e.target);
+      var json = xhr.getResponseJson();
+      console.log(json);
+   });
+
+   return;
+
+
+
    var gameloop = new rokko.components.GameLoopComponent(60, {
       onDraw: function (time) {
          renderer.render(time);

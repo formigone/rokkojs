@@ -1,0 +1,52 @@
+{
+   "maps": [
+      {
+         "name": "simple-map",
+         "width": 5,
+         "height": 4,
+         "tiles": [
+            1, 1, 1, 1, 1,
+            1, 0, 0, 0, 1,
+            1, 0, 2, 0, 1,
+            1, 2, 2, 2, 1
+         ],
+         "tileWidth": 32,
+         "tileHeight": 32,
+         "tileDict": [
+            {
+               "key": 0,
+               "code": "AIR",
+               "texture": {
+                  "img": "/config/simple.map.json",
+                  "x": 0,
+                  "y": 0,
+                  "width": 32,
+                  "height": 32
+               }
+            },
+            {
+               "key": 1,
+               "code": "SOLID",
+               "texture": {
+                  "img": "/config/simple.map.json",
+                  "x": 35,
+                  "y": 35,
+                  "width": 32,
+                  "height": 32
+               }
+            },
+            {
+               "key": 2,
+               "code": "SOLID",
+               "texture": {
+                  "img": "/config/simple.map.json",
+                  "x": 0,
+                  "y": 35,
+                  "width": 32,
+                  "height": 32
+               }
+            }
+         ]
+      }
+   ]
+}

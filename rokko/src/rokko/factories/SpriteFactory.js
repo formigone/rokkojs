@@ -98,6 +98,7 @@ rokko.factories.SpriteFactory.prototype.make = function (name) {
    };
 
    var json = this.sprites[name];
+   console.log("json: ", json);
    // NOTE: only need to litstr when referencing input file
 //   var img = {};
 //   img["frames"] = json["frames"];

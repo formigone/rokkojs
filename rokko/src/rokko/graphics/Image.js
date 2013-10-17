@@ -26,9 +26,10 @@ rokko.graphics.Image = function (img, options) {
 
 /**
  *
+ * @param {number} time
  * @returns {HTMLImageElement}
  */
-rokko.graphics.Image.prototype.getElement = function () {
+rokko.graphics.Image.prototype.getElement = function (time) {
    return this.img;
 };
 

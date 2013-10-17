@@ -38,6 +38,7 @@ goog.inherits(rokko.graphics.SequencedImage, rokko.graphics.Image);
 
 /**
  * @inheritDoc
+ * @param {number} time
  * @returns {HTMLImageElement}
  */
 rokko.graphics.SequencedImage.prototype.getElement = function (time) {

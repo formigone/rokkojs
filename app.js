@@ -22,11 +22,10 @@ function main() {
 
    spriteFactory.loadFromJson("/config/megaman.sprites.json", function (spriteFac) {
       var sprite = spriteFac.make("standing");
-      console.log("sprite made: ", sprite);
-//      entityFactory.loadFromJson("/config/megaman.entity.json", function (entFactory) {
-//         var player = entFactory.make("megaman");
-//         console.log(player);
-//      });
+      entityFactory.loadFromJson("/config/megaman.entity.json", function (entFactory) {
+         var player = entFactory.make("megaman");
+         console.log(player);
+      });
    });
 
 //   var gameloop = new rokko.components.GameLoopComponent(60, {

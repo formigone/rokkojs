@@ -76,40 +76,13 @@ rokko.factories.SpriteFactory.prototype.make = function (name) {
       return null;
    }
 
-   var __sprite = {
-      "name": "standing",
-      "img": "/img/8bitmm.gif",
-      "frames": [
-         {
-            "pos": {
-               "x": 105,
-               "y": 11
-            },
-            "size": {
-               "w": 21,
-               "h": 24
-            },
-            "freq": 1500
-         }
-         // ...
-      ],
-      "freq": 100,
-      "currFrame": 0
-   };
-
    var json = this.sprites[name];
-   console.log("json: ", json);
-   // NOTE: only need to litstr when referencing input file
-//   var img = {};
-//   img["frames"] = json["frames"];
-//   img["freq"] = json["freq"];
-//   img["currFrame"] = json["currFrame"];
 
    return new rokko.graphics.Sprite(
-      new rokko.graphics.SequencedImage(json["img"], {
-         frames: json["frames"],
-         freq: json["freq"],
-         currFrame: json["currFrame"]
+      new rokko.graphics.SequencedImage(json.img, {
+         frames: json.frames,
+         freq: json.freq,
+         currFrame: json.currFrame
       })
    );
 };

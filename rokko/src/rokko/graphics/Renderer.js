@@ -19,6 +19,14 @@ rokko.graphics.Renderer = function (display) {
     */
    this.entities = [];
 
+   /**
+    * @private
+    * @type {rokko.maps.TileMap}
+    */
+   this.map = {
+      tiles: []
+   };
+
    /** @experimental */
    this.bwMode = false;
    this.wonlyMode = false;
@@ -26,6 +34,8 @@ rokko.graphics.Renderer = function (display) {
 
 rokko.graphics.Renderer.prototype.render = function (time) {
    this.display.clear();
+
+   this.display.renderMap(this.map);
 
    for (var i = 0, len = this.entities.length; i < len; i++) {
       this.display.render(this.entities[i], time);
@@ -61,4 +71,12 @@ rokko.graphics.Renderer.prototype.render = function (time) {
  */
 rokko.graphics.Renderer.prototype.addEntity = function (entity) {
    this.entities.push(entity);
+};
+
+/**
+ *
+ * @param {rokko.maps.TileMap} map
+ */
+rokko.graphics.Renderer.prototype.setMap = function (map) {
+   this.map = map;
 };

@@ -6,7 +6,9 @@ goog.require("goog.dom");
  *
  * @constructor
  */
-rokko.graphics.Display = function (width, height, smooth, isDebugMode) {
+rokko.graphics.Display = function (world, width, height, smooth, isDebugMode) {
+   /** @private */
+   
    /** @private */
    /** @type {HTMLCanvasElement} */
    this.canvas = goog.dom.createDom("canvas", {width: width || 800, height: height || 450});
@@ -57,4 +59,27 @@ rokko.graphics.Display.prototype.isDebugMode = function () {
 
 rokko.graphics.Display.prototype.clear = function () {
    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+};
+
+rokko.graphics.Display.prototype.renderMap = function (map) {
+   var width = map.width;
+   var height = map.height;
+   var tileWidth = map.tileWidth;
+   var tileHeight = map.tileHeight;
+   var tiles = map.tiles;
+   var tile;
+   var texture;
+
+   for (var i = 0, len = tiles.length; i < len; i++) {
+      tile = tiles[i];
+      texture = tile.texture;
+
+      this.ctx.drawImage(texture.img,
+         texture.x, texture.y,
+         texture.width, texture.height,
+         tileWidth * (i % width),
+         tileHeight * parseInt(i / width),
+         tileWidth, tileHeight
+      );
+   }
 };

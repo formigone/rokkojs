@@ -11,21 +11,12 @@ goog.require("rokko.components.MoveComponent");
 goog.require("rokko.components.GameLoopComponent");
 goog.require("rokko.factories.SpriteFactory");
 goog.require("rokko.factories.EntityFactory");
+goog.require("rokko.factories.MapFactory");
 
 goog.require("goog.events.KeyHandler");
 goog.require("goog.net.XhrIo");
 
 function main() {
-
-   goog.net.XhrIo.send("/config/simple.map.json", function(e){
-      var xhr = /** @type {goog.net.XhrIo} */ (e.target);
-      var json = xhr.getResponseJson();
-      console.log(json);
-   });
-
-   return;
-
-
 
    var gameloop = new rokko.components.GameLoopComponent(60, {
       onDraw: function (time) {
@@ -44,6 +35,7 @@ function main() {
    var player = null;
    var spriteFactory = new rokko.factories.SpriteFactory();
    var entityFactory = new rokko.factories.EntityFactory(spriteFactory);
+   var mapFac = new rokko.factories.MapFactory();
 
    spriteFactory.loadFromJson("/config/megaman.sprites.json", function (spriteFactory) {
       entityFactory.loadFromJson("/config/megaman.entity.json", function (entFactory) {
@@ -69,7 +61,13 @@ function main() {
 
          player.addComponent(moveComp);
          renderer.addEntity(player);
-         gameloop.exec(null);
+
+         mapFac.loadFromJson("/config/simple.map.json?c=" + Math.random(), function(fac){
+            var map = fac.make("simple-map");
+            console.log(map);
+            renderer.setMap(map);
+            gameloop.exec(null);
+         });
       });
    });
 }

@@ -1,28 +1,16 @@
 goog.provide("rokko.map.TileMap");
 
 /**
- * @typedef {*}
- */
-rokko.map.Tile;
-
-/**
- * @typedef {*}
- */
-rokko.map.TileTexture;
-
-/**
  *
- * @param {number} width
- * @param {number} height
- * @param {Object.<string, *>} tiles
+ * @param {Object.<string, *>} options
  * @constructor
  */
-rokko.map.TileMap = function(width, height, tiles) {
-   this.width = width;
-   this.height = height;
-   this.tiles = [];
-
-   this.init(tiles);
+rokko.map.TileMap = function(options) {
+   this.width = options.width;
+   this.height = options.height;
+   this.tileWidth = options.tileWidth;
+   this.tileHeight = options.tileHeight;
+   this.tiles = options.tiles;
 };
 
 /**
@@ -34,20 +22,22 @@ rokko.map.TileMap.TileCode = {
 };
 
 /**
- *
- * Construct each tile with its dependencies
- *
- * @param {Object.<string, *>} tiles
+ * @typedef {{texture: rokko.map.TileMap.TileTexture, code: rokko.map.TileMap.TileCode}}
  */
-rokko.map.TileMap.prototype.init = function(tiles) {
-};
+rokko.map.TileMap.Tile;
+
+/**
+ * @typedef {{img: HTMLImageElement, x: number, y: number, width: number, height: number}}
+ */
+rokko.map.TileMap.TileTexture;
+
 
 /**
  * Convert a 2D coordinate into an index from a flat array, then return the corresponding tile
  *
  * @param {number} x
  * @param {number} y
- * @returns {rokko.map.Tile}
+ * @returns {rokko.map.TileMap.Tile}
  */
 rokko.map.TileMap.prototype.getTile = function(x, y) {
    return this.tiles[this.width * y + x];

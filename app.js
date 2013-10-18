@@ -27,7 +27,15 @@ function main() {
       }
    });
 
-   var canvas = new rokko.graphics.Display();
+   var canvas = new rokko.graphics.Display({
+      x: 0,
+      y: 0,
+      width: 12,
+      height: 8
+   },
+   64 * 12,
+   64 * 8);
+
    canvas.show(document.body);
    var renderer = new rokko.graphics.Renderer(canvas);
 

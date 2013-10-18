@@ -4,11 +4,18 @@ goog.require("goog.dom");
 
 /**
  *
+ * @param {rokko.graphics.Display.ViewPort} world
+ * @param {number} width
+ * @param {number} height
+ * @param {boolean=} smooth
+ * @param {boolean=} isDebugMode
  * @constructor
  */
 rokko.graphics.Display = function (world, width, height, smooth, isDebugMode) {
    /** @private */
-   
+   this.world = world;
+   this.world.len = world.width * world.height;
+
    /** @private */
    /** @type {HTMLCanvasElement} */
    this.canvas = goog.dom.createDom("canvas", {width: width || 800, height: height || 450});
@@ -19,6 +26,11 @@ rokko.graphics.Display = function (world, width, height, smooth, isDebugMode) {
    this.ctx["webkitImageSmoothingEnabled"] = smooth || false;
    this.__RENDER_DEBUGGING_MODE__ = isDebugMode || false;
 };
+
+/**
+ * @typedef {{width: number, height: number, x: number, y: number}}
+ */
+rokko.graphics.Display.ViewPort;
 
 rokko.graphics.Display.prototype.render = function (entity, time) {
    var enPos = entity.getPos();
@@ -62,24 +74,34 @@ rokko.graphics.Display.prototype.clear = function () {
 };
 
 rokko.graphics.Display.prototype.renderMap = function (map) {
-   var width = map.width;
-   var height = map.height;
+   var world = this.world;
+   var width = world.width;
    var tileWidth = map.tileWidth;
    var tileHeight = map.tileHeight;
    var tiles = map.tiles;
    var tile;
    var texture;
+   var y;
 
-   for (var i = 0, len = tiles.length; i < len; i++) {
-      tile = tiles[i];
+   for (var i = world.x, len = world.len; i < len; i++) {
+// y = i/worldWidth; offset = i % worldWidth + mapWidth * y
+// ^^ assumes world[x,y] == 0
+// *might be* y = i/worldWidth + world[y]; offset = i % worldWidth + mapWidth * y + world[x]
+      y = parseInt(i / width);
+      tile = tiles[(i % world.width) * y];
       texture = tile.texture;
 
       this.ctx.drawImage(texture.img,
          texture.x, texture.y,
          texture.width, texture.height,
          tileWidth * (i % width),
-         tileHeight * parseInt(i / width),
+         tileHeight * y,
          tileWidth, tileHeight
       );
    }
+};
+
+rokko.graphics.Display.prototype.scrollWorldBy = function(x, y) {
+   this.world.x += x;
+   this.world.y += y;
 };

@@ -11,10 +11,16 @@ goog.require("goog.dom");
  * @param {boolean=} isDebugMode
  * @constructor
  */
-rokko.graphics.Display = function (world, width, height, smooth, isDebugMode) {
+rokko.graphics.Display = function (view, width, height, smooth, isDebugMode) {
    /** @private */
-   this.world = world;
-   this.world.len = world.width * world.height;
+   this.view = view;
+   this.view.len = view.width * view.height;
+
+   /** @private */
+   this.mapWidth = view.width;
+
+   /** @private */
+   this.mapHeight = view.height;
 
    /** @private */
    /** @type {HTMLCanvasElement} */
@@ -74,34 +80,45 @@ rokko.graphics.Display.prototype.clear = function () {
 };
 
 rokko.graphics.Display.prototype.renderMap = function (map) {
-   var world = this.world;
-   var width = world.width;
+   var view = this.view;
    var tileWidth = map.tileWidth;
    var tileHeight = map.tileHeight;
    var tiles = map.tiles;
    var tile;
    var texture;
+   var x;
    var y;
+   var offset = view.y * map.width + view.x;
 
-   for (var i = world.x, len = world.len; i < len; i++) {
-// y = i/worldWidth; offset = i % worldWidth + mapWidth * y
-// ^^ assumes world[x,y] == 0
-// *might be* y = i/worldWidth + world[y]; offset = i % worldWidth + mapWidth * y + world[x]
-      y = parseInt(i / width);
-      tile = tiles[(i % world.width) * y];
+   for (var i = 0, len = view.len; i < len; i++) {
+      y = parseInt(i / view.width);
+      x = offset + i % view.width;
+
+      tile = tiles[offset + x + y * map.width];
       texture = tile.texture;
 
       this.ctx.drawImage(texture.img,
          texture.x, texture.y,
          texture.width, texture.height,
-         tileWidth * (i % width),
-         tileHeight * y,
+         tileWidth * x, tileHeight * y,
          tileWidth, tileHeight
       );
    }
 };
 
-rokko.graphics.Display.prototype.scrollWorldBy = function(x, y) {
-   this.world.x += x;
-   this.world.y += y;
+rokko.graphics.Display.prototype.setMapSize = function(width, height) {
+   this.mapWidth = width;
+   this.mapHeight = height;
+};
+
+rokko.graphics.Display.prototype.scrollViewBy = function(x, y) {
+   this.view.x += x;
+   if (this.view.x < 0) {
+      this.view.x = 0;
+   }
+
+   if (this.view.x + this.view.width > this.mapWidth) {
+      this.view.x = this.mapWidth - this.view.width;
+   }
+   this.view.y += y;
 };

@@ -18,6 +18,11 @@ goog.require("goog.net.XhrIo");
 
 function main() {
 
+   var VIEW_HOR_TILES = 16;
+   var VIEW_VER_TILES = 9;
+   var TILE_WIDTH = 64;
+   var TILE_HEIGHT = 64;
+
    var gameloop = new rokko.components.GameLoopComponent(60, {
       onDraw: function (time) {
          renderer.render(time);
@@ -30,11 +35,11 @@ function main() {
    var canvas = new rokko.graphics.Display({
       x: 0,
       y: 0,
-      width: 12,
-      height: 8
+      width: VIEW_HOR_TILES,
+      height: VIEW_VER_TILES
    },
-   64 * 12,
-   64 * 8);
+   VIEW_HOR_TILES * TILE_WIDTH,
+   VIEW_VER_TILES * TILE_HEIGHT);
 
    canvas.show(document.body);
    var renderer = new rokko.graphics.Renderer(canvas);
@@ -57,6 +62,9 @@ function main() {
 
                if (this.keys[comp.KeyCode.KEY_RIGHT]) {
                   player.sprite.setSprite("running", true);
+                  canvas.scrollViewBy(1, 0);
+               } if (this.keys[comp.KeyCode.KEY_LEFT]) {
+                  canvas.scrollViewBy(-1, 0);
                } else {
                   player.sprite.setSprite("standing", true);
                }

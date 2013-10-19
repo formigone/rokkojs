@@ -18,8 +18,8 @@ goog.require("goog.net.XhrIo");
 
 function main() {
 
-   var VIEW_HOR_TILES = 16;
-   var VIEW_VER_TILES = 9;
+   var VIEW_HOR_TILES = 15;
+   var VIEW_VER_TILES = 8;
    var TILE_WIDTH = 64;
    var TILE_HEIGHT = 64;
 
@@ -33,7 +33,7 @@ function main() {
    });
 
    var canvas = new rokko.graphics.Display({
-      x: 0,
+      x: 1,
       y: 0,
       width: VIEW_HOR_TILES,
       height: VIEW_VER_TILES
@@ -62,9 +62,9 @@ function main() {
 
                if (this.keys[comp.KeyCode.KEY_RIGHT]) {
                   player.sprite.setSprite("running", true);
-                  canvas.scrollViewBy(1, 0);
+                  canvas.scrollViewBy(0.1, 0);
                } if (this.keys[comp.KeyCode.KEY_LEFT]) {
-                  canvas.scrollViewBy(-1, 0);
+                  canvas.scrollViewBy(-0.1, 0);
                } else {
                   player.sprite.setSprite("standing", true);
                }
@@ -80,7 +80,7 @@ function main() {
 
          mapFac.loadFromJson("/config/simple.map.json?c=" + Math.random(), function(fac){
             var map = fac.make("simple-map");
-            console.log(map);
+            canvas.setMapSize(map.width, map.height);
             renderer.setMap(map);
             gameloop.exec(null);
          });

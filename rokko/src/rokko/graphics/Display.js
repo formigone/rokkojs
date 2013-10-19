@@ -81,6 +81,7 @@ rokko.graphics.Display.prototype.clear = function () {
 
 rokko.graphics.Display.prototype.renderMap = function (map) {
    var view = this.view;
+   var viewWidth = view.width;
    var tileWidth = map.tileWidth;
    var tileHeight = map.tileHeight;
    var tiles = map.tiles;
@@ -88,11 +89,11 @@ rokko.graphics.Display.prototype.renderMap = function (map) {
    var texture;
    var x;
    var y;
-   var offset = view.y * map.width + view.x;
+   var offset = parseInt(view.y) * map.width + parseInt(view.x);
 
    for (var i = 0, len = view.len; i < len; i++) {
-      y = parseInt(i / view.width);
-      x = offset + i % view.width;
+      y = parseInt(i / viewWidth);
+      x = offset + i % viewWidth;
 
       tile = tiles[offset + x + y * map.width];
       texture = tile.texture;
@@ -100,7 +101,7 @@ rokko.graphics.Display.prototype.renderMap = function (map) {
       this.ctx.drawImage(texture.img,
          texture.x, texture.y,
          texture.width, texture.height,
-         tileWidth * x, tileHeight * y,
+         (x - view.x) * tileWidth, tileHeight * y,
          tileWidth, tileHeight
       );
    }
@@ -112,13 +113,17 @@ rokko.graphics.Display.prototype.setMapSize = function(width, height) {
 };
 
 rokko.graphics.Display.prototype.scrollViewBy = function(x, y) {
-   this.view.x += x;
-   if (this.view.x < 0) {
+   var newX = this.view.x += x;
+   var newY = this.view.y += y;
+   var maxX = this.mapWidth - this.view.width - 1;
+
+   if (newX < 0) {
       this.view.x = 0;
+   } else if (newX > maxX) {
+      this.view.x = maxX;
+   } else {
+      this.view.x = newX;
    }
 
-   if (this.view.x + this.view.width > this.mapWidth) {
-      this.view.x = this.mapWidth - this.view.width;
-   }
-   this.view.y += y;
+   this.view.y += newY;
 };

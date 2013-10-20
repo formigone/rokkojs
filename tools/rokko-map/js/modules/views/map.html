@@ -1,0 +1,7 @@
+<div ng-controller="MapController">
+    <div ng-switch on="width + height">
+        <h1 ng-switch-when="0">{{title}}</h1>
+        <p ng-switch-default>Grid: {{width}}x{{height}}</p>
+    </div>
+</div>
+<div style="height: 800px"></div>

@@ -43,7 +43,13 @@ rokkoMap.controller("SettingsController", function ($scope) {
       margin: 10
    };
 
-   $scope.upload = function() {
-      console.log(this);
+   $scope.atlas;
+   $scope.tiles = [];
+
+   $scope.imgChange = function() {
+      setTimeout(function(){
+         $scope.atlas = $("#tileSettingsPrivew img")[0];
+         // TODO: calculate how many tiles in input image and update $scope.tiles with objects that can populate that list
+      }, 500);
    };
 });

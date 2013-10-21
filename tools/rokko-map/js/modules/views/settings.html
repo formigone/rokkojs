@@ -15,8 +15,21 @@
             <input type="number" value="{{tile.margin}}"/>
         </p>
 
-        <p>
-            <button class="btn btn-danger" ng-click="upload()">Select Image<input type="file"/></button>
-        </p>
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div class="fileupload-preview fileupload-exists thumbnail" id="tileSettingsPrivew" ng-change="imgChange()" ng-model="atlas"></div>
+            <div>
+                <span class="btn btn-file btn-danger">
+                    <span class="fileupload-new">Select image</span>
+                    <span class="fileupload-exists">Change image</span>
+                    <input type="file" onchange="angular.element(this).scope().imgChange()" ng-model="img" accept="image/*"/>
+                </span>
+            </div>
+        </div>
+
+        <div id="TilesetController">
+            <div class="tileImg" ng-repeat="tile in tiles">
+                <span class="tileImgBg">{{tile}}</span>
+            </div>
+        </div>
     </div>
 </div>

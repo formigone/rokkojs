@@ -4,10 +4,12 @@
     <title>RokkoMap</title>
 
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-fileupload.min.css"/>
     <script src="js/angular.min.js"></script>
     <script src="js/modules/RokkoMap.js"></script>
     <script src="vendor/jquery/jquery.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap-fileupload.min.js"></script>
 
     <style>
         .dashboardPush {
@@ -85,6 +87,25 @@
             float: left;
             background: #ccc;
             margin: 1px;
+            padding: 0;
+        }
+
+        .tileImgBg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            opacity: 0.8;
+            -webkit-transition: all 0.5s;
+        }
+
+        .tileImgBg:hover {
+            opacity: 1.0;
+        }
+
+        #tileSettingsPrivew {
+            display: none;
         }
     </style>
 </head>
@@ -93,7 +114,7 @@
 
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
-            <a class="brand" href="#/">Rokko Map</a>
+            <a class="brand" href="#/">RokkoMap</a>
             <ul class="nav" ng-controller="MenuController">
                 <li class="dropdown" ng-repeat="action in actions">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{action.name}} <b class="caret"></b></a>

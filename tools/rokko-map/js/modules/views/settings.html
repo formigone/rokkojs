@@ -1,12 +1,22 @@
-<div class="nav nav-list well" ng-controller="SettingsController">
-    <p class="nav-header">Spriteset Options</p>
-    <hr/>
-    <p>Tile size:
-        <input type="text" class="span3" value="{{tile.width}}"/>
-        <input type="text" class="span3" value="{{tile.height}}"/>
-    </p>
+<div class="nav nav-list well" ng-controller="SettingsController" id="SettingsController">
+    <p class="nav-header">Tileset Settings</p>
 
-    <p>Tile margin:
-        <input type="text" class="span3" value="{{tile.margin}}"/>
-    </p>
+    <div class="settingsBox">
+        <label>Tile size</label>
+
+        <p>
+            <input type="number" value="{{tile.width}}"/>
+            <input type="number" value="{{tile.height}}"/>
+        </p>
+
+        <label>Tile margin </label>
+
+        <p>
+            <input type="number" value="{{tile.margin}}"/>
+        </p>
+
+        <p>
+            <button class="btn btn-danger" ng-click="upload()">Select Image<input type="file"/></button>
+        </p>
+    </div>
 </div>

@@ -39,6 +39,53 @@
             background: #c00;
             color: #000 !important;
         }
+
+        #MapController {
+            height: 90%;
+        }
+
+        #MapController h1 {
+            text-align: center;
+            margin-top: 25%;
+            color: #aaa;
+            text-shadow: 0 1px 1px #333;
+            font-family: monospace;
+            font-weight: 300;
+        }
+
+        .settingsBox {
+            overflow: auto;
+        }
+
+        .settingsBox p, .settingsBox label {
+            display: block;
+            float: left;
+            width: 60%;
+        }
+
+        .settingsBox label {
+            width: 40%;
+        }
+
+        .settingsBox input {
+            width: 35%;
+        }
+
+        .settingsBox button input[type=file] {
+            display: none;
+        }
+
+        #TilesetController {
+            margin: 20px 0;
+        }
+
+        .tileImg {
+            width: 23%;
+            height: 55px;
+            float: left;
+            background: #ccc;
+            margin: 1px;
+        }
     </style>
 </head>
 <body>
@@ -48,10 +95,10 @@
         <div class="navbar-inner">
             <a class="brand" href="#/">Rokko Map</a>
             <ul class="nav" ng-controller="MenuController">
-                <li class="dropdown" ng-repeat="(action, children) in actions">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{action}} <b class="caret"></b></a>
+                <li class="dropdown" ng-repeat="action in actions">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{action.name}} <b class="caret"></b></a>
                     <ul class="dropdown-menu dropdown-toggle">
-                        <li ng-repeat="option in children" ng-click="dispatchMenu(option.id)">
+                        <li ng-repeat="option in action.children" ng-click="dispatchMenu(option.id)">
                             <a href="#">{{option.name}}</a>
                         </li>
                     </ul>

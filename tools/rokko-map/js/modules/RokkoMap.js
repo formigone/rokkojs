@@ -43,13 +43,48 @@ rokkoMap.controller("SettingsController", function ($scope) {
       margin: 10
    };
 
-   $scope.atlas;
-   $scope.tiles = [];
+   $scope.atlas = null;
+   $scope.frames = {
+      pos: [],
+      img: "",
+      hor: 0,
+      ver: 0,
+      width: 0,
+      height: 0
+   };
 
-   $scope.imgChange = function() {
-      setTimeout(function(){
-         $scope.atlas = $("#tileSettingsPrivew img")[0];
-         // TODO: calculate how many tiles in input image and update $scope.tiles with objects that can populate that list
+   $scope.test = function(){
+      if ($scope.atlas != null) {
+         $scope.imgChange();
+      }
+   }
+
+   $scope.imgChange = function () {
+      setTimeout(function () {
+         var atlas = $("#tileSettingsPrivew img")[0];
+         var imgWidth = atlas.width;
+         var imgHeight = atlas.height;
+         var tileWidth = $scope.tile.width;
+         var tileHeight = $scope.tile.height;
+         var pos = [];
+         $scope.frames.hor = parseInt(imgWidth / tileWidth);
+         $scope.frames.ver = parseInt(imgHeight / tileHeight);
+
+         $scope.frames.img = atlas.src;
+         $scope.frames.pos = [];
+         $scope.frames.width = $scope.frames.hor * 100;
+         $scope.frames.height = $scope.frames.ver * 100;
+
+         for (var i = 0, len = $scope.frames.ver * $scope.frames.hor; i < len; i++) {
+            pos.push({
+               x: (i * (tileWidth + $scope.tile.margin) % imgWidth),
+               y: parseInt(i / $scope.frames.ver) * tileHeight
+            });
+         }
+
+         $scope.atlas = atlas;
+         $scope.frames.pos = pos;
+         $scope.$digest();
       }, 500);
    };
 });

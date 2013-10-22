@@ -75,21 +75,13 @@ rokkoMap.controller("SettingsController", function ($scope) {
          $scope.frames.hor = parseInt(imgWidth / tileWidth);
          $scope.frames.ver = parseInt(imgHeight / tileHeight);
          $scope.frames.img = atlas.src;
-         $scope.frames.pos = [];
-
-         setTimeout(function(){
-            $scope.frames.width = 64;
-            $scope.frames.height = 64;
-            $scope.$digest();
-         }, 100);
 
          var point;
          for (var i = 0, len = $scope.frames.ver * $scope.frames.hor; i < len; i++) {
-            point = {
+            pos.push({
                x: i * tileWidth % imgWidth,
                y: parseInt(i / $scope.frames.hor) * tileHeight
-            };
-            pos.push(point);
+            });
          }
 
          $scope.atlas = atlas;

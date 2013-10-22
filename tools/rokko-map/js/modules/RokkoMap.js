@@ -19,7 +19,9 @@ rokkoMap.controller("MenuController", function ($rootScope) {
 });
 
 rokkoMap.controller("MapController", function ($scope) {
+   $scope.isMouseDown = false;
    $scope.isActive = "";
+   $scope.currBg = "";
    $scope.title = "No map selected";
    $scope.width = 0;
    $scope.height = 0;
@@ -38,7 +40,9 @@ rokkoMap.controller("MapController", function ($scope) {
 
       var grid = [];
       for (var i = 0, len = $scope.width * $scope.height; i < len; i++) {
-         grid.push(i);
+         grid.push({
+            bg: "transparent"
+         });
       }
 
       $scope.grid.cells = grid;
@@ -52,16 +56,30 @@ rokkoMap.controller("MapController", function ($scope) {
             break;
       }
    });
+
+   $scope.$on("TileChangeEvent", function (event, style) {
+      $scope.currBg = style;
+   });
+
+   $scope.setGrid = function($index, isClick) {
+      if ($scope.isMouseDown || isClick) {
+         $scope.grid.cells[$index].bg = $scope.currBg;
+      }
+   };
+
+   $scope.setMouse = function(state) {
+      $scope.isMouseDown = state;
+   };
 });
 
-rokkoMap.controller("SettingsController", function ($scope) {
-   $scope.tile = {
+rokkoMap.controller("SettingsController", function ($rootScope) {
+   $rootScope.tile = {
       width: 64,
       height: 64,
       margin: 0
    };
 
-   $scope.frames = {
+   $rootScope.frames = {
       pos: [],
       img: "",
       hor: 0,
@@ -71,9 +89,9 @@ rokkoMap.controller("SettingsController", function ($scope) {
       isActive: false
    };
 
-   $scope.atlas = null;
+   $rootScope.atlas = null;
 
-   $scope.imgChange = function () {
+   $rootScope.imgChange = function () {
       setTimeout(function () {
          var atlas = $("#tileSettingsPrivew img");
 
@@ -85,34 +103,38 @@ rokkoMap.controller("SettingsController", function ($scope) {
 
          var imgWidth = atlas.width;
          var imgHeight = atlas.height;
-         var halfMargin =  + parseInt($scope.tile.margin * 0.5);
-         var tileWidth = $scope.tile.width + halfMargin;
-         var tileHeight = $scope.tile.height + halfMargin;
+         var halfMargin =  + parseInt($rootScope.tile.margin * 0.5);
+         var tileWidth = $rootScope.tile.width + halfMargin;
+         var tileHeight = $rootScope.tile.height + halfMargin;
          var pos = [];
 
-         $scope.frames.hor = parseInt(imgWidth / tileWidth);
-         $scope.frames.ver = parseInt(imgHeight / tileHeight);
-         $scope.frames.img = atlas.src;
+         $rootScope.frames.hor = parseInt(imgWidth / tileWidth);
+         $rootScope.frames.ver = parseInt(imgHeight / tileHeight);
+         $rootScope.frames.img = atlas.src;
 
          var point;
-         for (var i = 0, len = $scope.frames.ver * $scope.frames.hor; i < len; i++) {
+         var x;
+         var y;
+         for (var i = 0, len = $rootScope.frames.ver * $rootScope.frames.hor; i < len; i++) {
+            x = i * tileWidth % imgWidth;
+            y = parseInt(i / $rootScope.frames.hor) * tileHeight;
             pos.push({
-               x: i * tileWidth % imgWidth,
-               y: parseInt(i / $scope.frames.hor) * tileHeight
+               bg: "url('" + $rootScope.frames.img + "') -" + x + "px -" + y + "px"
             });
          }
 
-         $scope.atlas = atlas;
-         $scope.frames.pos = pos;
-         $scope.$digest();
+         $rootScope.atlas = atlas;
+         $rootScope.frames.pos = pos;
+         $rootScope.$digest();
       }, 10);
    };
 
-   $scope.setTile = function($index) {
-      for (var i = 0, len = $scope.frames.pos.length; i < len; i++) {
-         $scope.frames.pos[i].isActive = false;
+   $rootScope.setTile = function($index) {
+      for (var i = 0, len = $rootScope.frames.pos.length; i < len; i++) {
+         $rootScope.frames.pos[i].isActive = false;
       }
 
-      $scope.frames.pos[$index].isActive = ($scope.frames.pos[$index].isActive == "set") ? "" : "set";
+      $rootScope.frames.pos[$index].isActive = ($rootScope.frames.pos[$index].isActive == "set") ? "" : "set";
+      $rootScope.$broadcast("TileChangeEvent", $rootScope.frames.pos[$index].bg);
    };
 });

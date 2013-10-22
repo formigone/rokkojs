@@ -3,12 +3,19 @@
         <h1 ng-switch-when="0">{{title}}</h1>
     </div>
 
-    <div class="mapGrid" style="width: {{width * (grid.cellWidth + 2)}}px; height: {{height * (grid.cellHeight + 2)}}px;">
+    <div class="mapGrid"
+         style="width: {{width * (grid.cellWidth + 2)}}px;
+         height: {{height * (grid.cellHeight + 2)}}px;">
         <div ng-repeat="cell in grid.cells"
+             ng-mousedown="setMouse(true)"
+             ng-mouseup="setMouse(false)"
+             ng-mousemove="setGrid($index, false)"
+             ng-click="setGrid($index, true)"
              class="mapCell"
              style="width: {{grid.cellWidth}}px;
                 height: {{grid.cellHeight}}px;
-                line-height: {{grid.cellHeight}}px;">{{cell}}</div>
+                line-height: {{grid.cellHeight}}px;
+                background: {{cell.bg}}"></div>
     </div>
 
     <div class="modal hide fade" id="mapDialog">

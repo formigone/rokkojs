@@ -30,7 +30,7 @@
             <div class="tileImg" ng-repeat="frame in frames.pos" style="width: {{tile.width}}px; height: {{tile.height}}px">
                 <span
                         class="tileImgBg {{frame.isActive}}"
-                        style="background: url({{frames.img}}) -{{frame.x}}px -{{frame.y}}px;"
+                        style="background: {{frame.bg}};"
                         ng-click="setTile($index)"></span>
             </div>
         </div>

@@ -42,8 +42,11 @@
             color: #000 !important;
         }
 
-        #MapController {
-            height: 90%;
+        #MapController.active {
+            max-height: 700px;
+            border: 1px solid #aaa;
+            box-shadow: 0 4px 15px #aaa;
+            overflow: auto;
         }
 
         #MapController h1 {
@@ -119,11 +122,22 @@
             border: 2px solid #c00;
             margin: -2px;
             position: relative;
-            z-index: 99999;
+            z-index: 99;
         }
 
         #tileSettingsPrivew {
             display: none;
+        }
+
+        .mapGrid {
+            overflow: auto;
+        }
+
+        .mapCell {
+            float: left;
+            border: 1px solid #333;
+            color: #aaa;
+            text-align: center;
         }
     </style>
 </head>

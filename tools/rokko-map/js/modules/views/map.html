@@ -1,8 +1,14 @@
-<div ng-controller="MapController" id="MapController">
-    <div ng-switch on="width + height">
+<div ng-controller="MapController" id="MapController" class="{{isActive}}">
+    <div ng-switch on="grid.cells.length">
         <h1 ng-switch-when="0">{{title}}</h1>
+    </div>
 
-        <p ng-switch-default>Grid: {{width}}x{{height}}</p>
+    <div class="mapGrid" style="width: {{width * (grid.cellWidth + 2)}}px; height: {{height * (grid.cellHeight + 2)}}px;">
+        <div ng-repeat="cell in grid.cells"
+             class="mapCell"
+             style="width: {{grid.cellWidth}}px;
+                height: {{grid.cellHeight}}px;
+                line-height: {{grid.cellHeight}}px;">{{cell}}</div>
     </div>
 
     <div class="modal hide fade" id="mapDialog">
@@ -12,13 +18,13 @@
         </div>
         <div class="modal-body">
             <p>Size in tiles:
-                <input type="text" value="{{width}}" placeholder="X" autofocus="true" class="span2"/>
-                <input type="text" value="{{height}}" placeholder="Y" class="span2"/>
+                <input type="number" value="{{width}}" ng-model="width" placeholder="X" autofocus="true" class="span2"/>
+                <input type="number" value="{{height}}" ng-model="height" placeholder="Y" class="span2"/>
             </p>
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary" ng-click="initGrid()">Continue</button>
+            <button class="btn btn-primary" data-dismiss="modal" ng-click="initGrid()">Continue</button>
         </div>
     </div>
 </div>

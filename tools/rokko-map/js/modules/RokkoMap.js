@@ -19,12 +19,30 @@ rokkoMap.controller("MenuController", function ($rootScope) {
 });
 
 rokkoMap.controller("MapController", function ($scope) {
+   $scope.isActive = "";
    $scope.title = "No map selected";
    $scope.width = 0;
    $scope.height = 0;
+   $scope.grid = {
+      cells: [],
+      cellWidth: 0,
+      cellHeight: 0
+   };
 
    $scope.initGrid = function () {
-      alert("?");
+      $scope.title = "Creating new map...";
+
+      // TODO: generate this size based on thumbanil size
+      $scope.grid.cellWidth = 64;
+      $scope.grid.cellHeight = 64;
+
+      var grid = [];
+      for (var i = 0, len = $scope.width * $scope.height; i < len; i++) {
+         grid.push(i);
+      }
+
+      $scope.grid.cells = grid;
+      $scope.isActive = "active";
    };
 
    $scope.$on("MenuEvent", function (event, option) {

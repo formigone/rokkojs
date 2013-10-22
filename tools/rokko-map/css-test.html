@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" ng-app="ksl">
+<head>
+    <title>AngularJS Drawing App: Prototype</title>
+    <script src="js/angular.min.js"></script>
+    <style>
+        .hook, .target {
+            list-style: none;
+            overflow: auto;
+            border: 1px solid #333;
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+            clear: both;
+        }
+
+        .hook li, .target li {
+            display: block;
+            width: 32px;
+            height: 32px;
+            float: left;
+            border: 1px solid #aaa;
+            margin: 0;
+            padding: 0;
+            cursor: default;
+        }
+
+        .info {
+            background: #000;
+            color: #0c0;
+            font-family: monospace;
+            font-size: 1.15em;
+            line-height: 1.5em;
+            padding: 5px 20px;
+        }
+
+        .info a {
+            color: #0f0;
+            font-weight: 800;
+            text-shadow: 0 0 25px #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div ng-controller="style">
+    <h3>{{title}}</h3>
+
+    <p>Grid: <input type="number" ng-model="width" ng-change="updateGrid()"/> X <input type="number" ng-model="height" ng-change="updateGrid()"/></p>
+    <p>Cell: <input type="number" ng-model="tileWidth" ng-change="updateGrid()"/> X <input type="number" ng-model="tileHeight" ng-change="updateGrid()"/></p>
+    <ul class="hook">
+        <li style="background: {{color.hex}}"
+            ng-repeat="color in colors"
+            ng-click="setActive($index)"></li>
+    </ul>
+
+    <hr/>
+    <div style="width: {{gridWidth}}px">
+        <ul class="target">
+            <li style="background: {{target.bg}}; width: {{tileWidth}}px; height: {{tileHeight}}px;"
+                    ng-repeat="target in targets"
+                    ng-click="setTarget($index, false)"
+                    ng-mousedown="setMouse(true, $index)"
+                    ng-mouseup="setMouse(false)"
+                    ng-mouseover="setTarget($index, true)"></li>
+        </ul>
+    </div>
+</div>
+
+<hr/>
+<div class="info">
+    <p><b>What is this?</b><br/>This [very simple] AngularJS app is an exercise in optimizing this pretty cool JavaScript framework. It seems that ng-repeat is not meant for large data sets, such as the grid represented in this HTML5 drawing app...</p>
+    <p><b>How to use</b><br/>Select a color from the color pallet, then click over the grid to color one or more cells with the color selected. Change the grid size and/or the cell size to experiment with a larger/smaller board. Note how relatively quickly the application crashes... In the context of this sort of app, having a board (600x800) should be a walk in the park. But with AngularJS, that doesn't seem to be the case.</p>
+    <p><b>Help me!</b><br/>If you know of any clever optimizations, workarounds, hacks, etc. that can make this app useful beyond a couple hundred cell, please let me know. You can reach me at my <a href="https://plus.google.com/103737161295645708507/posts">Google+ page</a>. Thanks!</p>
+    <p>Copyright &copy; 2013 <a href="http://www.rodrigo-silveira.com">Rodrigo Silveira.</a></p>
+</div>
+
+<script>
+    var ksl = angular.module("ksl", []);
+
+    ksl.controller("style", function ($scope) {
+        $scope.width = 16;
+        $scope.height = 9;
+        $scope.title = "AngularJS Drawing App: Prototype";
+        $scope.isMouseDown = false;
+        $scope.tileWidth = 16;
+        $scope.tileHeight = 16;
+        $scope.colors = [
+            {hex: "#c00"},
+            {hex: "#0c0"},
+            {hex: "#00c"},
+            {hex: "#fff"}
+        ];
+
+        $scope.gridWidth = ($scope.tileWidth + 2) * $scope.width + 2;
+        $scope.targets = [];
+
+        $scope.updateGrid = function(){
+            var len = $scope.width * $scope.height;
+            if (len < 0) {
+                len = 0;
+            }
+
+            var targets = [];
+            for (var i = 0; i < len; i++) {
+                targets.push({});
+            }
+
+            $scope.targets = targets;
+            $scope.gridWidth = ($scope.tileWidth + 2) * $scope.width + 2;
+        };
+
+        $scope.activeColor = $scope.colors[0].hex;
+
+        $scope.setActive = function($index) {
+            $scope.activeColor = $scope.colors[$index].hex;
+        };
+
+        $scope.setTarget = function($index, fromScroll) {
+            if ($scope.activeColor != null) {
+                if ((fromScroll && $scope.isMouseDown) || !fromScroll) {
+                    $scope.targets[$index].bg = $scope.activeColor;
+                }
+            }
+        };
+
+        $scope.setMouse = function(state, $index) {
+            $scope.isMouseDown = state;
+            if ($index !== undefined) {
+                $scope.setTarget($index, false);
+            }
+        };
+
+        $scope.updateGrid();
+    });
+</script>
+</body>
+</html>

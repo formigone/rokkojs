@@ -5,14 +5,14 @@
         <label>Tile size</label>
 
         <p>
-            <input type="number" value="{{tile.width}}" ng-change="test()" ng-model="tile.width"/>
-            <input type="number" value="{{tile.height}}" ng-change="test()" ng-model="tile.height"/>
+            <input type="number" value="{{tile.width}}" ng-change="imgChange()" ng-model="tile.width"/>
+            <input type="number" value="{{tile.height}}" ng-change="imgChange()" ng-model="tile.height"/>
         </p>
 
         <label>Tile margin </label>
 
         <p>
-            <input type="number" value="{{tile.margin}}" ng-change="test()" ng-model="tile.margin"/>
+            <input type="number" value="{{tile.margin}}" ng-change="imgChange()" ng-model="tile.margin"/>
         </p>
 
         <div class="fileupload fileupload-new" data-provides="fileupload">
@@ -28,9 +28,10 @@
 
         <div id="TilesetController">
             <div class="tileImg" ng-repeat="frame in frames.pos">
-                <span class="tileImgBg" style="
-                    background: url({{frames.img}}) -{{frame.x}}px -{{frame.y}}px;
-                    background-size: {{frames.width}}% {{frames.height}}px">({{frame.x}}, {{frame.y}})<br/>{{frames.hor}} x {{frames.ver}}</span>
+                <span
+                        class="tileImgBg {{frame.isActive}}"
+                        style="background: url({{frames.img}}) -{{frame.x}}px -{{frame.y}}px;"
+                        ng-click="setTile($index)"></span>
             </div>
         </div>
     </div>

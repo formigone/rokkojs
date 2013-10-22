@@ -57,6 +57,7 @@
 
         .settingsBox {
             overflow: auto;
+            padding-bottom: 10px;
         }
 
         .settingsBox p, .settingsBox label {
@@ -79,11 +80,14 @@
 
         #TilesetController {
             margin: 20px 0;
+            overflow: auto;
+            overflow-x: hidden;
+            height: 450px;
         }
 
         .tileImg {
-            width: 23%;
-            height: 55px;
+            width: 64px;
+            height: 64px;
             float: left;
             background: #ccc;
             border: 1px solid #fff;
@@ -101,12 +105,21 @@
             height: 100%;
             padding: 0;
             margin: 0;
-            opacity: 0.75;
+            opacity: 0.65;
             -webkit-transition: all 0.5s;
         }
 
         .tileImgBg:hover {
             opacity: 1.0;
+        }
+
+        .tileImgBg.set {
+            opacity: 1.0;
+            box-shadow: inset 0 2px 12px #000;
+            border: 2px solid #c00;
+            margin: -2px;
+            position: relative;
+            z-index: 99999;
         }
 
         #tileSettingsPrivew {
@@ -135,8 +148,8 @@
 
     <div class="dashboardPush"></div>
     <div class="row-fluid">
-        <div class="span2" ng-include src="'js/modules/views/settings.html'"></div>
-        <div class="span10" ng-include src="'js/modules/views/map.html'"></div>
+        <div class="span3" ng-include src="'js/modules/views/settings.html'"></div>
+        <div class="span9" ng-include src="'js/modules/views/map.html'"></div>
     </div>
 </div>
 </body>

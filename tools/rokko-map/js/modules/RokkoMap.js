@@ -38,53 +38,71 @@ rokkoMap.controller("MapController", function ($scope) {
 
 rokkoMap.controller("SettingsController", function ($scope) {
    $scope.tile = {
-      width: 32,
-      height: 32,
-      margin: 10
+      width: 64,
+      height: 64,
+      margin: 0
    };
 
-   $scope.atlas = null;
    $scope.frames = {
       pos: [],
       img: "",
       hor: 0,
       ver: 0,
       width: 0,
-      height: 0
+      height: 0,
+      isActive: false
    };
 
-   $scope.test = function(){
-      if ($scope.atlas != null) {
-         $scope.imgChange();
-      }
-   }
+   $scope.atlas = null;
 
    $scope.imgChange = function () {
       setTimeout(function () {
-         var atlas = $("#tileSettingsPrivew img")[0];
+         var atlas = $("#tileSettingsPrivew img");
+
+         if (atlas.length == 0) {
+            return false;
+         } else {
+            atlas = atlas[0];
+         }
+
          var imgWidth = atlas.width;
          var imgHeight = atlas.height;
-         var tileWidth = $scope.tile.width;
-         var tileHeight = $scope.tile.height;
+         var halfMargin =  + parseInt($scope.tile.margin * 0.5);
+         var tileWidth = $scope.tile.width + halfMargin;
+         var tileHeight = $scope.tile.height + halfMargin;
          var pos = [];
+
          $scope.frames.hor = parseInt(imgWidth / tileWidth);
          $scope.frames.ver = parseInt(imgHeight / tileHeight);
-
          $scope.frames.img = atlas.src;
          $scope.frames.pos = [];
-         $scope.frames.width = $scope.frames.hor * 100;
-         $scope.frames.height = $scope.frames.ver * 100;
 
+         setTimeout(function(){
+            $scope.frames.width = 64;
+            $scope.frames.height = 64;
+            $scope.$digest();
+         }, 100);
+
+         var point;
          for (var i = 0, len = $scope.frames.ver * $scope.frames.hor; i < len; i++) {
-            pos.push({
-               x: (i * (tileWidth + $scope.tile.margin) % imgWidth),
-               y: parseInt(i / $scope.frames.ver) * tileHeight
-            });
+            point = {
+               x: i * tileWidth % imgWidth,
+               y: parseInt(i / $scope.frames.hor) * tileHeight
+            };
+            pos.push(point);
          }
 
          $scope.atlas = atlas;
          $scope.frames.pos = pos;
          $scope.$digest();
-      }, 500);
+      }, 10);
+   };
+
+   $scope.setTile = function($index) {
+      for (var i = 0, len = $scope.frames.pos.length; i < len; i++) {
+         $scope.frames.pos[i].isActive = false;
+      }
+
+      $scope.frames.pos[$index].isActive = ($scope.frames.pos[$index].isActive == "set") ? "" : "set";
    };
 });

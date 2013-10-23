@@ -23,20 +23,16 @@ rokkoMap.controller("MapController", function ($scope) {
    $scope.isActive = "";
    $scope.currBg = "";
    $scope.title = "No map selected";
-   $scope.width = 0;
-   $scope.height = 0;
+   $scope.width = 16;
+   $scope.height = 9;
    $scope.grid = {
       cells: [],
-      cellWidth: 0,
-      cellHeight: 0
+      cellWidth: 32,
+      cellHeight: 32
    };
 
    $scope.initGrid = function () {
       $scope.title = "Creating new map...";
-
-      // TODO: generate this size based on thumbanil size
-      $scope.grid.cellWidth = 64;
-      $scope.grid.cellHeight = 64;
 
       var grid = [];
       for (var i = 0, len = $scope.width * $scope.height; i < len; i++) {

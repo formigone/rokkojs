@@ -24,9 +24,14 @@
             <h3>New map settings</h3>
         </div>
         <div class="modal-body">
-            <p>Size in tiles:
-                <input type="number" value="{{width}}" ng-model="width" placeholder="X" autofocus="true" class="span2"/>
-                <input type="number" value="{{height}}" ng-model="height" placeholder="Y" class="span2"/>
+            <p>Grid size:
+                <input type="number" ng-model="width" placeholder="X" autofocus="true" class="span2"/>
+                <input type="number" ng-model="height" placeholder="Y" class="span2"/>
+            </p>
+
+            <p>Cell size:
+                <input type="number" ng-model="grid.cellWidth" placeholder="X" autofocus="true" class="span2"/>
+                <input type="number" ng-model="grid.cellHeight" placeholder="Y" class="span2"/>
             </p>
         </div>
         <div class="modal-footer">

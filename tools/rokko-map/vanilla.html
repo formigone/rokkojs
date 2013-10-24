@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en" ng-app="RokkoMap">
+<head>
+    <title>RokkoMap</title>
+
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap-fileupload.min.css"/>
+    <script src="vendor/jquery/jquery.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap-fileupload.min.js"></script>
+
+    <style>
+        .dashboardPush {
+            margin-top: 65px;
+        }
+
+        .brand {
+            margin-left: 0 !important;
+            color: #c00 !important;
+            font-family: mono;
+        }
+
+        .dropdown-menu {
+            border-radius: 0;
+            margin-top: 0;
+            border-top: 1px solid #333;
+        }
+
+        .dropdown-menu:after {
+            border: none !important;
+            content: "" !important;
+        }
+
+        .dropdown-menu a {
+            color: #aaa !important;
+        }
+
+        .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a, .dropdown-submenu:focus>a {
+            background: #c00;
+            color: #000 !important;
+        }
+
+        #MapController.active {
+            max-height: 700px;
+            border: 1px solid #aaa;
+            box-shadow: 0 4px 15px #aaa;
+            overflow: auto;
+        }
+
+        #MapController h1 {
+            text-align: center;
+            margin-top: 25%;
+            color: #aaa;
+            text-shadow: 0 1px 1px #333;
+            font-family: monospace;
+            font-weight: 300;
+        }
+
+        .settingsBox {
+            overflow: auto;
+            padding-bottom: 10px;
+        }
+
+        .settingsBox p, .settingsBox label {
+            display: block;
+            float: left;
+            width: 60%;
+        }
+
+        .settingsBox label {
+            width: 40%;
+        }
+
+        .settingsBox input {
+            width: 35%;
+        }
+
+        .settingsBox button input[type=file] {
+            display: none;
+        }
+
+        #TilesetController {
+            margin: 20px 0;
+            overflow: auto;
+            overflow-x: hidden;
+            height: 450px;
+        }
+
+        .tileImg {
+            width: 64px;
+            height: 64px;
+            float: left;
+            background: #ccc;
+            border: 1px solid #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tileImg:hover {
+            border: 1px solid #333;
+        }
+
+        .tileImgBg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            opacity: 0.65;
+            -webkit-transition: all 0.5s;
+        }
+
+        .tileImgBg:hover {
+            opacity: 1.0;
+        }
+
+        .tileImgBg.set {
+            opacity: 1.0;
+            box-shadow: inset 0 2px 12px #000;
+            border: 2px solid #c00;
+            margin: -2px;
+            position: relative;
+            z-index: 99;
+        }
+
+        #tileSettingsPrivew {
+            display: none;
+        }
+
+        .mapGrid {
+            overflow: auto;
+        }
+
+        .mapCell {
+            float: left;
+            border: 1px solid #333;
+            color: #aaa;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <span class="brand">RokkoMap</span>
+            <ul class="nav" data-intent="navEvent">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Map <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-toggle">
+                        <li>
+                            <a href="#" data-target="new">New</a>
+                            <a href="#" data-target="open">Open</a>
+                            <a href="#" data-target="export">Export</a>
+                            <a href="#" data-target="settings">Settings</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-toggle">
+                        <li>
+                            <a href="#" data-target="about">About RokkoMap</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="dashboardPush"></div>
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="nav nav-list well" id="SettingsController">
+                <p class="nav-header">Tileset Settings</p>
+
+                <div class="settingsBox" data-intent="tileSettingsEvent">
+                    <label>Tile size</label>
+                    <p>
+                        <input type="number" value="64" data-target="width"/>
+                        <input type="number" value="64" data-target="height"/>
+                    </p>
+
+                    <label>Tile margin </label>
+                    <p>
+                        <input type="number" value="0" data-target="margin"/>
+                    </p>
+
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div class="fileupload-preview fileupload-exists thumbnail" id="tileSettingsPrivew"></div>
+                        <div>
+                <span class="btn btn-file btn-danger">
+                    <span class="fileupload-new">Select image</span>
+                    <span class="fileupload-exists">Change image</span>
+                    <input type="file" accept="image/*" id="uploadElement"/>
+                </span>
+                        </div>
+                    </div>
+
+                    <div id="TilesetController"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="span9"></div>
+    </div>
+</div>
+<script>
+    var settings = {
+        els: $("[data-intent='tileSettingsEvent'] input[data-target]"),
+        atlas: null,
+        tile: {
+            width: 0,
+            height: 0,
+            margin: 0
+        }
+    };
+
+    function regEvents(){
+        $("#uploadElement").on("change", function(){
+            settings.atlas = $("#tileSettingsPrivew img").attr("src");
+        });
+
+        $(settings.els).on("change", function(){
+            settings.tile[$(this).attr("data-target")] = $(this).val() * 1;
+        });
+    }
+
+//    <div class="tileImg"></div>
+
+    function init() {
+        var els = settings.els;
+        for (var i = 0, len = els.length; i < len; i++) {
+            settings.tile[$(els[i]).attr("data-target")] = $(els[i]).val() * 1;
+        }
+    }
+
+    (function main(){
+        regEvents();
+        init();
+    })();
+</script>
+</body>
+</html>

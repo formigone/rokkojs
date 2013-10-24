@@ -79,7 +79,7 @@
             display: none;
         }
 
-        #TilesetController {
+        #tilePickerContainer {
             margin: 20px 0;
             overflow: auto;
             overflow-x: hidden;
@@ -199,42 +199,178 @@
                         </div>
                     </div>
 
-                    <div id="TilesetController"></div>
+                    <div id="tilePickerContainer"></div>
                 </div>
             </div>
 
         </div>
-        <div class="span9"></div>
+        <div class="span9">
+            <div id="MapController">
+                <div class="mapGrid">
+                    <h1>No map selected</h1>
+                </div>
+
+                <div class="mapGrid"
+                     style="width: {{width * (grid.cellWidth + 2)}}px;
+         height: {{height * (grid.cellHeight + 2)}}px;">
+                    <div ng-repeat="cell in grid.cells"
+                         ng-mousedown="setMouse(true)"
+                         ng-mouseup="setMouse(false)"
+                         ng-mousemove="setGrid($index, false)"
+                         ng-click="setGrid($index, true)"
+                         class="mapCell"
+                         style="width: {{grid.cellWidth}}px;
+                height: {{grid.cellHeight}}px;
+                line-height: {{grid.cellHeight}}px;
+                background: {{cell.bg}}"></div>
+                </div>
+
+                <div class="modal hide fade" id="mapDialog">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>New map settings</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Grid size:
+                            <input type="number" ng-model="width" placeholder="X" autofocus="true" class="span2"/>
+                            <input type="number" ng-model="height" placeholder="Y" class="span2"/>
+                        </p>
+
+                        <p>Cell size:
+                            <input type="number" ng-model="grid.cellWidth" placeholder="X" autofocus="true" class="span2"/>
+                            <input type="number" ng-model="grid.cellHeight" placeholder="Y" class="span2"/>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" data-dismiss="modal" data-intent="buildGrid">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 <script>
-    var settings = {
-        els: $("[data-intent='tileSettingsEvent'] input[data-target]"),
-        atlas: null,
-        tile: {
-            width: 0,
-            height: 0,
-            margin: 0
+    var nav = {
+        linkEls: $("[data-intent='navEvent'] a[data-target]"),
+        listeners: [],
+        /** @type {function(string)} cb */
+        register: function(cb) {
+            this.listeners.push(cb);
+        },
+        /** @type: {string} event */
+        dispatchEvent: function(event) {
+            for (var i = 0, len = this.listeners.length; i < len; i++) {
+                this.listeners[i](event);
+            }
         }
     };
 
-    function regEvents(){
-        $("#uploadElement").on("change", function(){
-            settings.atlas = $("#tileSettingsPrivew img").attr("src");
-        });
+    var settings = {
+        els: $("[data-intent='tileSettingsEvent'] input[data-target]"),
+        atlas: null,
+        tilePickerEl: $("#tilePickerContainer"),
+        activeTile: [],
+        tile: {
+            width: 0,
+            height: 0,
+            margin: 0,
+            hor: 0,
+            ver: 0
+        }
+    };
 
-        $(settings.els).on("change", function(){
-            settings.tile[$(this).attr("data-target")] = $(this).val() * 1;
-        });
+    var grid = {
+        width: 10,
+        height: 10,
+        cellWidth: 10,
+        cellHeight: 10,
+        gridEl: $("#MapController .mapGrid")
+    };
+
+    function createMapGrid() {
+        $(grid.gridEl).css({width: grid.width * (grid.cellWidth + 2)});
+        $(grid.gridEl).parent().addClass("active");
     }
 
-//    <div class="tileImg"></div>
+    function createTilePicker() {
+        var atlas = settings.atlas;
+        var halfMargin = settings.tile.margin * 0.5;
+
+        settings.tile.width += halfMargin;
+        settings.tile.height += halfMargin;
+
+        var tile = settings.tile;
+        settings.tile.hor = parseInt(atlas.width / tile.width);
+        settings.tile.ver = parseInt(atlas.height / tile.height);
+
+        var tiles = "";
+        var x;
+        var y;
+        for (var i = 0, len = tile.hor * tile.ver; i < len; i++) {
+            x = i * tile.width % atlas.width;
+            y = parseInt(i / settings.tile.hor) * tile.height;
+
+            tiles += '<div class="tileImg" style="'
+                    + 'width: ' + settings.tile.width + 'px;'
+                    + 'height: ' + settings.tile.height + 'px;'
+                + '"><span class="tileImgBg" style="'
+                + 'background: url(' + atlas.src + ')'
+                + ' -' + x + 'px'
+                + ' -' + y + 'px'
+                + ';'
+                + '"></span></div>';
+        }
+
+        settings.tilePickerEl.html(tiles);
+    }
+
+    function regEvents(){
+        $(nav.linkEls).on("click", function(event){
+            event.preventDefault();
+            var target = $(this).attr("data-target");
+            nav.dispatchEvent(target);
+        });
+
+        $("#uploadElement").on("change", function(){
+            setTimeout(function(){
+                settings.atlas = $("#tileSettingsPrivew img")[0];
+                createTilePicker();
+            }, 100);
+        });
+
+        $(settings.els).on("keyup", updateSettings);
+        $(settings.els).on("change", updateSettings);
+        function updateSettings(){
+            settings.tile[$(this).attr("data-target")] = $(this).val() * 1;
+            createTilePicker();
+        }
+
+        $(settings.tilePickerEl).on("click", ".tileImgBg", function(){
+            $(".tileImgBg").removeClass("set");
+            $(this).addClass("set");
+            settings.activeTile = $(this);
+        });
+
+        $("[data-intent='buildGrid']").on("click", function(){
+            alert("TODO: process modal and create new map");
+        });
+    }
 
     function init() {
         var els = settings.els;
         for (var i = 0, len = els.length; i < len; i++) {
             settings.tile[$(els[i]).attr("data-target")] = $(els[i]).val() * 1;
         }
+
+        nav.register(function(event) {
+            switch (event) {
+                case "new":
+                    $("#mapDialog").modal();
+                  break;
+            }
+        });
     }
 
     (function main(){

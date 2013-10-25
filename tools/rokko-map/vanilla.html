@@ -210,35 +210,36 @@
                     <h1>No map selected</h1>
                 </div>
 
-                <div class="mapGrid"
-                     style="width: {{width * (grid.cellWidth + 2)}}px;
-         height: {{height * (grid.cellHeight + 2)}}px;">
-                    <div ng-repeat="cell in grid.cells"
-                         ng-mousedown="setMouse(true)"
-                         ng-mouseup="setMouse(false)"
-                         ng-mousemove="setGrid($index, false)"
-                         ng-click="setGrid($index, true)"
-                         class="mapCell"
-                         style="width: {{grid.cellWidth}}px;
-                height: {{grid.cellHeight}}px;
-                line-height: {{grid.cellHeight}}px;
-                background: {{cell.bg}}"></div>
-                </div>
+                <div class="mapGrid"></div>
+                <!--<div class="mapGrid"-->
+                     <!--style="width: {{width * (grid.cellWidth + 2)}}px;-->
+         <!--height: {{height * (grid.cellHeight + 2)}}px;">-->
+                    <!--<div ng-repeat="cell in grid.cells"-->
+                         <!--ng-mousedown="setMouse(true)"-->
+                         <!--ng-mouseup="setMouse(false)"-->
+                         <!--ng-mousemove="setGrid($index, false)"-->
+                         <!--ng-click="setGrid($index, true)"-->
+                         <!--class="mapCell"-->
+                         <!--style="width: {{grid.cellWidth}}px;-->
+                <!--height: {{grid.cellHeight}}px;-->
+                <!--line-height: {{grid.cellHeight}}px;-->
+                <!--background: {{cell.bg}}"></div>-->
+                <!--</div>-->
 
                 <div class="modal hide fade" id="mapDialog">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                         <h3>New map settings</h3>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" data-intent="newMapEvent">
                         <p>Grid size:
-                            <input type="number" ng-model="width" placeholder="X" autofocus="true" class="span2"/>
-                            <input type="number" ng-model="height" placeholder="Y" class="span2"/>
+                            <input type="number" data-target="width" value="16" autofocus="true" class="span2"/>
+                            <input type="number" data-target="height" value="9" class="span2"/>
                         </p>
 
                         <p>Cell size:
-                            <input type="number" ng-model="grid.cellWidth" placeholder="X" autofocus="true" class="span2"/>
-                            <input type="number" ng-model="grid.cellHeight" placeholder="Y" class="span2"/>
+                            <input type="number" data-target="cellWidth" value="64" class="span2"/>
+                            <input type="number" data-target="cellHeight" value="64" class="span2"/>
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -267,7 +268,7 @@
         }
     };
 
-    var settings = {
+    var tilePicker = {
         els: $("[data-intent='tileSettingsEvent'] input[data-target]"),
         atlas: null,
         tilePickerEl: $("#tilePickerContainer"),
@@ -278,54 +279,92 @@
             margin: 0,
             hor: 0,
             ver: 0
-        }
+        },
+        cssId: "rokkoMapTilePickerCss",
+        domCssIndex: -1,
+        atlasClass: "rokkoMapAtlasClass"
     };
 
     var grid = {
-        width: 10,
-        height: 10,
-        cellWidth: 10,
-        cellHeight: 10,
-        gridEl: $("#MapController .mapGrid")
+        width: 0,
+        height: 0,
+        cellWidth: 0,
+        cellHeight: 0,
+        gridEl: $("#MapController .mapGrid"),
+        els: $("[data-intent='newMapEvent'] input[data-target]"),
+        cells: []
     };
 
+    /**
+     *
+     */
     function createMapGrid() {
         $(grid.gridEl).css({width: grid.width * (grid.cellWidth + 2)});
         $(grid.gridEl).parent().addClass("active");
     }
 
+    /**
+     * TODO: Fix this mess. Only works on first doc.styleSheet. Maybe find a way to remove it from the document altogether??
+     */
+    function resetDomCss() {
+        $("#" + tilePicker.cssId).remove();
+        $("body").append('<style title="' + tilePicker.cssId + '"></style>');
+        var c = document.styleSheets;
+        for (var i = 0, len = c.length; i < len; i++){
+            if (c[i].title == tilePicker.cssId){
+                tilePicker.domCssIndex = i;
+                break;
+            }
+        }
+
+        try {
+            document.styleSheets[tilePicker.domCssIndex].removeRule(".timeImg");
+            document.styleSheets[tilePicker.domCssIndex].removeRule(".tileImg ." + tilePicker.atlasClass);
+        } catch (e){}
+    }
+
+    /**
+     *
+     */
     function createTilePicker() {
-        var atlas = settings.atlas;
-        var halfMargin = settings.tile.margin * 0.5;
+        resetDomCss();
 
-        settings.tile.width += halfMargin;
-        settings.tile.height += halfMargin;
+        var atlas = tilePicker.atlas;
+        var halfMargin = tilePicker.tile.margin * 0.5;
 
-        var tile = settings.tile;
-        settings.tile.hor = parseInt(atlas.width / tile.width);
-        settings.tile.ver = parseInt(atlas.height / tile.height);
+        tilePicker.tile.width += halfMargin;
+        tilePicker.tile.height += halfMargin;
+
+        document.styleSheets[tilePicker.domCssIndex].insertRule(".tileImg {"
+                + "width:  " + tilePicker.tile.width  + "px;"
+                + "height: " + tilePicker.tile.height + "px;}");
+
+        document.styleSheets[tilePicker.domCssIndex].insertRule(".tileImg ." + tilePicker.atlasClass + "{ background: url(" + atlas.src + ")}");
+
+        var tile = tilePicker.tile;
+        tilePicker.tile.hor = parseInt(atlas.width / tile.width);
+        tilePicker.tile.ver = parseInt(atlas.height / tile.height);
 
         var tiles = "";
         var x;
         var y;
         for (var i = 0, len = tile.hor * tile.ver; i < len; i++) {
             x = i * tile.width % atlas.width;
-            y = parseInt(i / settings.tile.hor) * tile.height;
+            y = parseInt(i / tilePicker.tile.hor) * tile.height;
 
-            tiles += '<div class="tileImg" style="'
-                    + 'width: ' + settings.tile.width + 'px;'
-                    + 'height: ' + settings.tile.height + 'px;'
-                + '"><span class="tileImgBg" style="'
-                + 'background: url(' + atlas.src + ')'
-                + ' -' + x + 'px'
-                + ' -' + y + 'px'
-                + ';'
-                + '"></span></div>';
+            tiles += '<div class="tileImg">'
+                    + '<span class="tileImgBg ' + tilePicker.atlasClass + '"'
+                    + 'style="background-position: -' + x + 'px -' + y + 'px;"'
+                    + '></span>'
+                    + '</div>';
         }
 
-        settings.tilePickerEl.html(tiles);
+        tilePicker.tilePickerEl.html(tiles);
     }
 
+    /**
+     *
+     */
     function regEvents(){
         $(nav.linkEls).on("click", function(event){
             event.preventDefault();
@@ -335,33 +374,47 @@
 
         $("#uploadElement").on("change", function(){
             setTimeout(function(){
-                settings.atlas = $("#tileSettingsPrivew img")[0];
+                tilePicker.atlas = $("#tileSettingsPrivew img")[0];
                 createTilePicker();
             }, 100);
         });
 
-        $(settings.els).on("keyup", updateSettings);
-        $(settings.els).on("change", updateSettings);
+        $(tilePicker.els).on("keyup", updateSettings);
+        $(tilePicker.els).on("change", updateSettings);
         function updateSettings(){
-            settings.tile[$(this).attr("data-target")] = $(this).val() * 1;
+            tilePicker.tile[$(this).attr("data-target")] = $(this).val() * 1;
             createTilePicker();
         }
 
-        $(settings.tilePickerEl).on("click", ".tileImgBg", function(){
+        $(tilePicker.tilePickerEl).on("click", ".tileImgBg", function(){
             $(".tileImgBg").removeClass("set");
             $(this).addClass("set");
-            settings.activeTile = $(this);
+            tilePicker.activeTile = $(this);
         });
 
         $("[data-intent='buildGrid']").on("click", function(){
-            alert("TODO: process modal and create new map");
+            var cells = grid.cells;
+            var html = "";
+            for (var i = 0, len = grid.width * grid.height; i < len; i++) {
+                html += '<div class="mapCell" style="width: 64px; height: 64px;" data-cell="rokkoMapCell' + i + '"></div>';
+            }
+
+            $(".mapGrid").html(html);
         });
     }
 
+    /**
+     *
+     */
     function init() {
-        var els = settings.els;
+        var els = tilePicker.els;
         for (var i = 0, len = els.length; i < len; i++) {
-            settings.tile[$(els[i]).attr("data-target")] = $(els[i]).val() * 1;
+            tilePicker.tile[$(els[i]).attr("data-target")] = $(els[i]).val() * 1;
+        }
+
+        els = grid.els;
+        for (i = 0, len = els.length; i < len; i++) {
+            grid[$(els[i]).attr("data-target")] = $(els[i]).val() * 1;
         }
 
         nav.register(function(event) {

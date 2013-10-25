@@ -290,6 +290,7 @@
         height: 0,
         cellWidth: 0,
         cellHeight: 0,
+        isMouseDown: false,
         gridEl: $("#MapController .mapGrid"),
         els: $("[data-intent='newMapEvent'] input[data-target]"),
         cells: []
@@ -310,6 +311,11 @@
         }
 
         $(".mapGrid").html(html);
+    }
+
+    function blitzCell() {
+        $(this).addClass(tilePicker.atlasClass);
+        $(this).css(tilePicker.activeStyle[0], tilePicker.activeStyle[1]);
     }
 
     function resetDomCss() {
@@ -409,12 +415,27 @@
             tilePicker.activeStyle[1] = tilePicker.activeStyle[1].trim().replace(";", "");
         });
 
-        $("[data-intent='buildGrid']").on("click", createMapGrid);
-
         $(".mapGrid").on("click", ".mapCell", function(){
-            $(this).addClass(tilePicker.atlasClass);
-            $(this).css(tilePicker.activeStyle[0], tilePicker.activeStyle[1]);
+            grid.isMouseDown = false;
+            blitzCell.call(this);
         });
+
+        $(".mapGrid").on("mouseup", ".mapCell", function(){
+            grid.isMouseDown = false;
+        });
+
+        $(".mapGrid").on("mousedown", ".mapCell", function(){
+            grid.isMouseDown = true;
+            blitzCell.call(this);
+        });
+
+        $(".mapGrid").on("mousemove", ".mapCell", function(){
+            if (grid.isMouseDown) {
+                blitzCell.call(this);
+            }
+        });
+
+        $("[data-intent='buildGrid']").on("click", createMapGrid);
     }
 
     /**

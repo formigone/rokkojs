@@ -210,7 +210,6 @@
                     <h1>No map selected</h1>
                 </div>
 
-                <div class="mapGrid"></div>
                 <!--<div class="mapGrid"-->
                      <!--style="width: {{width * (grid.cellWidth + 2)}}px;-->
          <!--height: {{height * (grid.cellHeight + 2)}}px;">-->
@@ -282,7 +281,8 @@
         },
         cssId: "rokkoMapTilePickerCss",
         domCssIndex: -1,
-        atlasClass: "rokkoMapAtlasClass"
+        atlasClass: "rokkoMapAtlasClass",
+        activeStyle: ""
     };
 
     var grid = {
@@ -301,11 +301,17 @@
     function createMapGrid() {
         $(grid.gridEl).css({width: grid.width * (grid.cellWidth + 2)});
         $(grid.gridEl).parent().addClass("active");
+
+        grid.cells = [];
+        var html = "";
+        for (var i = 0, len = grid.width * grid.height; i < len; i++) {
+            grid.cells.push({});
+            html += '<div class="mapCell" style="width: 64px; height: 64px;" data-cell="rokkoMapCell_' + i + '"></div>';
+        }
+
+        $(".mapGrid").html(html);
     }
 
-    /**
-     * TODO: Fix this mess. Only works on first doc.styleSheet. Maybe find a way to remove it from the document altogether??
-     */
     function resetDomCss() {
         $("#" + tilePicker.cssId).remove();
         $("body").append('<style title="' + tilePicker.cssId + '"></style>');
@@ -319,7 +325,7 @@
 
         try {
             document.styleSheets[tilePicker.domCssIndex].removeRule(".timeImg");
-            document.styleSheets[tilePicker.domCssIndex].removeRule(".tileImg ." + tilePicker.atlasClass);
+            document.styleSheets[tilePicker.domCssIndex].removeRule("." + tilePicker.atlasClass);
         } catch (e){}
     }
 
@@ -339,7 +345,7 @@
                 + "width:  " + tilePicker.tile.width  + "px;"
                 + "height: " + tilePicker.tile.height + "px;}");
 
-        document.styleSheets[tilePicker.domCssIndex].insertRule(".tileImg ." + tilePicker.atlasClass + "{ background: url(" + atlas.src + ")}");
+        document.styleSheets[tilePicker.domCssIndex].insertRule("." + tilePicker.atlasClass + "{ background: url(" + atlas.src + ")}");
 
         var tile = tilePicker.tile;
         tilePicker.tile.hor = parseInt(atlas.width / tile.width);
@@ -379,27 +385,35 @@
             }, 100);
         });
 
-        $(tilePicker.els).on("keyup", updateSettings);
-        $(tilePicker.els).on("change", updateSettings);
-        function updateSettings(){
+        // One way data binding
+        $(tilePicker.els).on("keyup", updatePickerSettings);
+        $(tilePicker.els).on("change", updatePickerSettings);
+        function updatePickerSettings(){
             tilePicker.tile[$(this).attr("data-target")] = $(this).val() * 1;
             createTilePicker();
+        }
+
+        // One way data binding
+        $(grid.els).on("keyup", updateGridSettings);
+        $(grid.els).on("change", updateGridSettings);
+        function updateGridSettings(){
+            grid[$(this).attr("data-target")] = $(this).val() * 1;
         }
 
         $(tilePicker.tilePickerEl).on("click", ".tileImgBg", function(){
             $(".tileImgBg").removeClass("set");
             $(this).addClass("set");
             tilePicker.activeTile = $(this);
+            tilePicker.activeStyle = $(this).attr("style").split(":");
+            tilePicker.activeStyle[0] = tilePicker.activeStyle[0].trim();
+            tilePicker.activeStyle[1] = tilePicker.activeStyle[1].trim().replace(";", "");
         });
 
-        $("[data-intent='buildGrid']").on("click", function(){
-            var cells = grid.cells;
-            var html = "";
-            for (var i = 0, len = grid.width * grid.height; i < len; i++) {
-                html += '<div class="mapCell" style="width: 64px; height: 64px;" data-cell="rokkoMapCell' + i + '"></div>';
-            }
+        $("[data-intent='buildGrid']").on("click", createMapGrid);
 
-            $(".mapGrid").html(html);
+        $(".mapGrid").on("click", ".mapCell", function(){
+            $(this).addClass(tilePicker.atlasClass);
+            $(this).css(tilePicker.activeStyle[0], tilePicker.activeStyle[1]);
         });
     }
 

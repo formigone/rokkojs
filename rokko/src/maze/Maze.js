@@ -32,7 +32,6 @@ var Player = function(x, y, width, height, color) {
     this.width = width;
     this.height = height;
     this.color = color;
-    console.log(this, width, height);
 };
 
 /**
@@ -210,6 +209,32 @@ Board.prototype.getNeighbors = function(x, y) {
     };
 };
 
+/**
+ *
+ * @param {number} x
+ * @param {number} y
+ * @return bool
+ */
+Board.prototype.canMove = function (x, y, dir) {
+    x = parseInt(x, 10);
+    y = parseInt(y, 10);
+
+    if (x < 0 || y < 0) {
+        return false;
+    }
+
+    if (x > this.width - 1 || y > this.height - 1) {
+        return false;
+    }
+
+    var cell = this.getCell(x, y);
+    if (cell.walls & dir) {
+//        return false;
+    }
+
+    return true;
+};
+
 var Controller = function() {
     this.keys = {};
 };
@@ -289,21 +314,12 @@ BoardRenderer.prototype.render = function(time) {
                 this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.cellWidth, this.wallThickness);
             }
 
-//            if (cells[i].start) {
-//                this.ctx.fillStyle = '#cc0';
-//                this.ctx.fillRect(pos.x * this.cellWidth + (this.cellWidth * 0.25), pos.y * this.cellHeight + (this.cellHeight * 0.25), this.cellWidth * 0.5, this.cellHeight * 0.5);
-//                this.ctx.fillStyle = this.colors.wall;
-//            } else if (cells[i].end) {
-//                this.ctx.fillStyle = '#fff';
-//                this.ctx.fillRect(pos.x * this.cellWidth + (this.cellWidth * 0.25), pos.y * this.cellHeight + (this.cellHeight * 0.25), this.cellWidth * 0.5, this.cellHeight * 0.5);
-//                this.ctx.fillStyle = this.colors.wall;
-//            }
 
             this.ctx.fillStyle = this.target.color;
-            this.ctx.fillRect(this.target.x * this.cellWidth + (this.cellWidth * 0.25), this.target.y * this.cellHeight + (this.cellHeight * 0.25), this.target.width, this.target.height);
+            this.ctx.fillRect(this.target.x * this.cellWidth + (this.cellWidth * 0.1), this.target.y * this.cellHeight + (this.cellHeight * 0.1), this.target.width, this.target.height);
 
             this.ctx.fillStyle = this.hero.color;
-            this.ctx.fillRect(this.hero.x * this.cellWidth + (this.cellWidth * 0.25), this.hero.y * this.cellHeight + (this.cellHeight * 0.25), this.hero.width, this.hero.height);
+            this.ctx.fillRect(this.hero.x * this.cellWidth + (this.cellWidth * 0.1), this.hero.y * this.cellHeight + (this.cellHeight * 0.1), this.hero.width, this.hero.height);
             this.ctx.fillStyle = this.colors.wall;
         }
 

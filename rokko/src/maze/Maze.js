@@ -57,7 +57,7 @@ var BoardRenderer = function(board, options) {
     this.height = options.height;
 
     this.wallThickness = options.thickness;
-    this.cellWidth = this.width / this.board.width;// - this.wallThickness * (this.board.width + 1);
+    this.cellWidth = this.width / this.board.width// - this.wallThickness * (this.board.width + 1);
     this.cellHeight = this.height / this.board.height;// - this.wallThickness * (this.board.height + 1);
 
     this.colors = {
@@ -87,5 +87,13 @@ BoardRenderer.prototype.render = function(){
 
         this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.wallThickness, this.height);
         this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.width, this.wallThickness);
+
+        if (pos.x === this.board.width - 1) {
+            this.ctx.fillRect((pos.x + 1) * this.cellWidth - this.wallThickness, pos.y * this.cellHeight, this.wallThickness, this.height);
+        }
+
+        if (pos.y === this.board.height - 1) {
+            this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.width, this.wallThickness);
+        }
     }
 };

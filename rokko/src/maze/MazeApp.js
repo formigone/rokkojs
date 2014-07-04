@@ -1,5 +1,6 @@
 var main = function(){
-    var board = new Board(5, 5);
+    var board = new Board(2, 2);
+    board.generate();
     var renderer = new BoardRenderer(board, {
         width: 500,
         height: 500,

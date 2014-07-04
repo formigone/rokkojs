@@ -3,12 +3,16 @@
  * @constructor
  */
 var Cell = function() {
-    this.walls = {
-        up: true,
-        down: true,
-        left: true,
-        right: true
-    };
+    this.init = false;
+
+    this.walls = 0x1111;
+};
+
+Cell.walls = {
+    UP: 0x1000,
+    DOWN: 0x0100,
+    LEFT: 0x0010,
+    RIGHT: 0x0001
 };
 
 
@@ -26,10 +30,32 @@ var Board = function(width, height) {
     this.init();
 };
 
-Board.prototype.init = function(){
+Board.prototype.init = function() {
     for (var i = 0, len = this.width * this.height; i < len; i++) {
         this.cells.push(new Cell());
     }
+};
+
+Board.prototype.generate = function(){
+    var stack = [];
+
+    var carveTo = function(x, y) {
+        if (this.cells.visited) {
+            return;
+        }
+    };
+
+    this.cells[0].init = true;
+    this.cells[0].walls = 0x1011;
+
+    this.cells[1].init = true;
+    this.cells[1].walls = 0x1011;
+
+    this.cells[2].init = true;
+    this.cells[2].walls = 0x0110;
+
+    this.cells[3].init = true;
+    this.cells[3].walls = 0x0101;
 };
 
 /**
@@ -40,7 +66,14 @@ Board.prototype.init = function(){
 Board.prototype.getPos = function(i) {
     return {
         x: i % this.width,
-        y: parseInt(i / this.height)
+        y: parseInt(i / this.height, 10)
+    };
+};
+
+Board.prototype.getNeighbors = function(i) {
+    var pos = this.getPos(i);
+
+    return {
     };
 };
 
@@ -57,7 +90,7 @@ var BoardRenderer = function(board, options) {
     this.height = options.height;
 
     this.wallThickness = options.thickness;
-    this.cellWidth = this.width / this.board.width// - this.wallThickness * (this.board.width + 1);
+    this.cellWidth = this.width / this.board.width;// - this.wallThickness * (this.board.width + 1);
     this.cellHeight = this.height / this.board.height;// - this.wallThickness * (this.board.height + 1);
 
     this.colors = {
@@ -75,7 +108,7 @@ var BoardRenderer = function(board, options) {
     container.appendChild(this.canvas);
 };
 
-BoardRenderer.prototype.render = function(){
+BoardRenderer.prototype.render = function() {
     var cells = this.board.cells;
     var pos = {};
 
@@ -84,15 +117,24 @@ BoardRenderer.prototype.render = function(){
 
     for (var i = 0, len = cells.length; i < len; i++) {
         pos = this.board.getPos(i);
-
-        this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.wallThickness, this.height);
-        this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.width, this.wallThickness);
-
-        if (pos.x === this.board.width - 1) {
-            this.ctx.fillRect((pos.x + 1) * this.cellWidth - this.wallThickness, pos.y * this.cellHeight, this.wallThickness, this.height);
+console.log(pos, cells[i], i);
+        if (cells[i].walls & Cell.walls.LEFT) {
+            this.ctx.fillStyle = '#00c';
+            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.wallThickness, this.height);
+            this.ctx.fillStyle = this.colors.wall;
         }
 
-        if (pos.y === this.board.height - 1) {
+        if (cells[i].walls & Cell.walls.UP) {
+            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.width, this.wallThickness);
+        }
+
+        if (cells[i].walls & Cell.walls.RIGHT) {
+            this.ctx.fillStyle = '#0c0';
+            this.ctx.fillRect((pos.x + 1) * this.cellWidth - this.wallThickness, pos.y * this.cellHeight, this.wallThickness, this.height);
+            this.ctx.fillStyle = this.colors.wall;
+        }
+
+        if (cells[i].walls & Cell.walls.DOWN) {
             this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.width, this.wallThickness);
         }
     }

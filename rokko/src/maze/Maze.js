@@ -85,10 +85,19 @@ Board.prototype.generate = function() {
         var cell = self.getCell(x, y);
 
         if (cell.init) {
-            return;
+            stack.pop();
+            var next = stack.pop();
+            self.getCell(next.x, next.y).init = false;
+
+            if (stack.length > 0) {
+                carveTo(next.x, next.y);
+            }
+
+            return true;
         }
 
         cell.init = true;
+        stack.push({x: x, y: y});
 
         var neig = self.getNeighbors(x, y);
         keys = shuffle(keys);
@@ -101,7 +110,6 @@ Board.prototype.generate = function() {
             switch (rand) {
                 case 'up':
                     if (!neig.up.init) {
-                        console.log(' ^');
                         self.clearWall(x, y, Cell.walls.UP);
                         self.clearWall(x, y - 1, Cell.walls.DOWN);
                         y--;
@@ -111,7 +119,6 @@ Board.prototype.generate = function() {
 
                 case 'down':
                     if (!neig.down.init) {
-                        console.log(' v');
                         self.clearWall(x, y, Cell.walls.DOWN);
                         self.clearWall(x, y + 1, Cell.walls.UP);
                         y++;
@@ -120,7 +127,6 @@ Board.prototype.generate = function() {
                     break;
                 case 'left':
                     if (!neig.left.init) {
-                        console.log(' <');
                         self.clearWall(x, y, Cell.walls.LEFT);
                         self.clearWall(x - 1, y, Cell.walls.RIGHT);
                         x--;
@@ -129,7 +135,6 @@ Board.prototype.generate = function() {
                     break;
                 case 'right':
                     if (!neig.right.init) {
-                        console.log(' >');
                         self.clearWall(x, y, Cell.walls.RIGHT);
                         self.clearWall(x + 1, y, Cell.walls.LEFT);
                         x++;
@@ -139,9 +144,7 @@ Board.prototype.generate = function() {
             }
         }
 
-        return carveTo(x, y);
-
-        return true;
+        carveTo(x, y);
     };
 
     return carveTo(0, 0);
@@ -187,8 +190,8 @@ var BoardRenderer = function(board, options) {
     this.height = options.height;
 
     this.wallThickness = options.thickness;
-    this.cellWidth = this.width / this.board.width;// - this.wallThickness * (this.board.width + 1);
-    this.cellHeight = this.height / this.board.height;// - this.wallThickness * (this.board.height + 1);
+    this.cellWidth = this.width / this.board.width;
+    this.cellHeight = this.height / this.board.height;
 
     this.colors = {
         bg: options.bgColor,

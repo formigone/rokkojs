@@ -1,12 +1,12 @@
 var main = function(){
-    var board = new Board(10, 10);
+    var board = new Board(30, 30);
     board.generate();
     var renderer = new BoardRenderer(board, {
         width: window.innerWidth,
         height: window.innerHeight,
         thickness: 1,
-        bgColor: '#333',
-        wallColor: '#fff'
+        bgColor: '#000',
+        wallColor: '#0c0'
     });
 
     renderer.render();

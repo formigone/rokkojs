@@ -4,7 +4,6 @@
  */
 var Cell = function() {
     this.init = false;
-
     this.walls = 0x1111;
 };
 
@@ -15,6 +14,8 @@ Cell.walls = {
     RIGHT: 0x0001
 };
 
+Cell.dummy = new Cell();
+Cell.dummy.init = true;
 
 /**
  *
@@ -36,26 +37,114 @@ Board.prototype.init = function() {
     }
 };
 
-Board.prototype.generate = function(){
-    var stack = [];
+/**
+ *
+ * @param {number} x
+ * @param {number} y
+ * @return Cell
+ */
+Board.prototype.getCell = function(x, y) {
+    var i = y * this.width + x;
 
-    var carveTo = function(x, y) {
-        if (this.cells.visited) {
-            return;
-        }
+    return this.cells[i];
+};
+
+/**
+ *
+ * @param {number} x
+ * @param {number} y
+ * @param {number} wall
+ */
+Board.prototype.setWall = function(x, y, wall) {
+    var i = y * this.width + x;
+    this.cells[i].walls = wall;
+};
+
+/**
+ *
+ * @param {number} x
+ * @param {number} y
+ * @param {number} wall
+ */
+Board.prototype.clearWall = function(x, y, wall) {
+    var i = y * this.width + x;
+    this.cells[i].walls ^= wall;
+};
+
+Board.prototype.generate = function() {
+    var stack = [];
+    var self = this;
+    var keys = ['up', 'down', 'left', 'right'];
+
+    function shuffle(arr) {
+        for (var j, x, i = arr.length; i; j = Math.floor(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+        return arr;
     };
 
-    this.cells[0].init = true;
-    this.cells[0].walls = 0x1011;
+    var carveTo = function(x, y) {
+        var cell = self.getCell(x, y);
 
-    this.cells[1].init = true;
-    this.cells[1].walls = 0x1011;
+        if (cell.init) {
+            return;
+        }
 
-    this.cells[2].init = true;
-    this.cells[2].walls = 0x0110;
+        cell.init = true;
 
-    this.cells[3].init = true;
-    this.cells[3].walls = 0x0101;
+        var neig = self.getNeighbors(x, y);
+        keys = shuffle(keys);
+        var check = 0;
+        var rand = 0;
+
+        while (check++ < keys.length) {
+            rand = keys[check - 1];
+
+            switch (rand) {
+                case 'up':
+                    if (!neig.up.init) {
+                        console.log(' ^');
+                        self.clearWall(x, y, Cell.walls.UP);
+                        self.clearWall(x, y - 1, Cell.walls.DOWN);
+                        y--;
+                        check = keys.length;
+                    }
+                    break;
+
+                case 'down':
+                    if (!neig.down.init) {
+                        console.log(' v');
+                        self.clearWall(x, y, Cell.walls.DOWN);
+                        self.clearWall(x, y + 1, Cell.walls.UP);
+                        y++;
+                        check = keys.length;
+                    }
+                    break;
+                case 'left':
+                    if (!neig.left.init) {
+                        console.log(' <');
+                        self.clearWall(x, y, Cell.walls.LEFT);
+                        self.clearWall(x - 1, y, Cell.walls.RIGHT);
+                        x--;
+                        check = keys.length;
+                    }
+                    break;
+                case 'right':
+                    if (!neig.right.init) {
+                        console.log(' >');
+                        self.clearWall(x, y, Cell.walls.RIGHT);
+                        self.clearWall(x + 1, y, Cell.walls.LEFT);
+                        x++;
+                        check = keys.length;
+                    }
+                    break;
+            }
+        }
+
+        return carveTo(x, y);
+
+        return true;
+    };
+
+    return carveTo(0, 0);
 };
 
 /**
@@ -70,10 +159,18 @@ Board.prototype.getPos = function(i) {
     };
 };
 
-Board.prototype.getNeighbors = function(i) {
-    var pos = this.getPos(i);
-
+/**
+ *
+ * @param {number} x
+ * @param {number} y
+ * @returns {Array.<Cell>}
+ */
+Board.prototype.getNeighbors = function(x, y) {
     return {
+        up: (y > 0 ? this.getCell(x, y - 1) : Cell.dummy),
+        down: (y < this.height - 1 ? this.getCell(x, y + 1) : Cell.dummy),
+        left: (x > 0 ? this.getCell(x - 1, y) : Cell.dummy),
+        right: (x < this.width - 1 ? this.getCell(x + 1, y) : Cell.dummy)
     };
 };
 
@@ -112,7 +209,8 @@ BoardRenderer.prototype.render = function() {
     var cells = this.board.cells;
     var pos = {};
 
-    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.fillStyle = this.colors.bg;
+    this.ctx.fillRect(0, 0, this.width, this.height);
     this.ctx.fillStyle = this.colors.wall;
 
     for (var i = 0, len = cells.length; i < len; i++) {

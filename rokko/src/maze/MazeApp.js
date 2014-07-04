@@ -5,7 +5,7 @@ var main = function(){
         height: 500,
         thickness: 3,
         bgColor: '#fff',
-        wallColor: '#333'
+        wallColor: '#c00'
     });
 
     renderer.render();

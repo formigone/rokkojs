@@ -34,6 +34,18 @@ Board.prototype.init = function(){
 
 /**
  *
+ * @param {number} i
+ * @return {Object.<number, number>}
+ */
+Board.prototype.getPos = function(i) {
+    return {
+        x: i % this.width,
+        y: parseInt(i / this.height)
+    };
+};
+
+/**
+ *
  * @param {Board} board
  * @param {Object.<string|number>} options
  * @constructor
@@ -43,7 +55,10 @@ var BoardRenderer = function(board, options) {
 
     this.width = options.width;
     this.height = options.height;
-    this.thickness = options.thickness;
+
+    this.wallThickness = options.thickness;
+    this.cellWidth = this.width / this.board.width;// - this.wallThickness * (this.board.width + 1);
+    this.cellHeight = this.height / this.board.height;// - this.wallThickness * (this.board.height + 1);
 
     this.colors = {
         bg: options.bgColor,
@@ -61,5 +76,16 @@ var BoardRenderer = function(board, options) {
 };
 
 BoardRenderer.prototype.render = function(){
+    var cells = this.board.cells;
+    var pos = {};
 
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.fillStyle = this.colors.wall;
+
+    for (var i = 0, len = cells.length; i < len; i++) {
+        pos = this.board.getPos(i);
+
+        this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.wallThickness, this.height);
+        this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.width, this.wallThickness);
+    }
 };

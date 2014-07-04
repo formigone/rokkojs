@@ -117,25 +117,21 @@ BoardRenderer.prototype.render = function() {
 
     for (var i = 0, len = cells.length; i < len; i++) {
         pos = this.board.getPos(i);
-console.log(pos, cells[i], i);
+
         if (cells[i].walls & Cell.walls.LEFT) {
-            this.ctx.fillStyle = '#00c';
-            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.wallThickness, this.height);
-            this.ctx.fillStyle = this.colors.wall;
+            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.wallThickness, this.cellHeight);
         }
 
         if (cells[i].walls & Cell.walls.UP) {
-            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.width, this.wallThickness);
+            this.ctx.fillRect(pos.x * this.cellWidth, pos.y * this.cellHeight, this.cellWidth, this.wallThickness);
         }
 
         if (cells[i].walls & Cell.walls.RIGHT) {
-            this.ctx.fillStyle = '#0c0';
-            this.ctx.fillRect((pos.x + 1) * this.cellWidth - this.wallThickness, pos.y * this.cellHeight, this.wallThickness, this.height);
-            this.ctx.fillStyle = this.colors.wall;
+            this.ctx.fillRect((pos.x + 1) * this.cellWidth - this.wallThickness, pos.y * this.cellHeight, this.wallThickness, this.cellHeight);
         }
 
         if (cells[i].walls & Cell.walls.DOWN) {
-            this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.width, this.wallThickness);
+            this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.cellWidth, this.wallThickness);
         }
     }
 };

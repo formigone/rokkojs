@@ -49,6 +49,19 @@ Board.prototype.getCell = function(x, y) {
     return this.cells[i];
 };
 
+Board.prototype.seed = function(){
+    var start = parseInt(Math.random() * this.cells.length, 10);
+    var end = -1;
+    var min = this.cells.length * 0.25;
+
+    do {
+        end = parseInt(Math.random() * this.cells.length, 10);
+    } while (Math.abs(start - end) < min);
+
+    this.cells[start].start = true;
+    this.cells[end].end = true;
+};
+
 /**
  *
  * @param {number} x
@@ -233,6 +246,16 @@ BoardRenderer.prototype.render = function() {
 
         if (cells[i].walls & Cell.walls.DOWN) {
             this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.cellWidth, this.wallThickness);
+        }
+
+        if (cells[i].start) {
+            this.ctx.fillStyle = '#c00';
+            this.ctx.fillRect(pos.x * this.cellWidth + (this.cellWidth * 0.1), pos.y * this.cellHeight + (this.cellHeight * 0.1), this.cellWidth * 0.8, this.cellHeight * 0.8);
+            this.ctx.fillStyle = this.colors.wall;
+        } else if (cells[i].end) {
+            this.ctx.fillStyle = '#fff';
+            this.ctx.fillRect(pos.x * this.cellWidth + (this.cellWidth * 0.1), pos.y * this.cellHeight + (this.cellHeight * 0.1), this.cellWidth * 0.8, this.cellHeight * 0.8);
+            this.ctx.fillStyle = this.colors.wall;
         }
     }
 };

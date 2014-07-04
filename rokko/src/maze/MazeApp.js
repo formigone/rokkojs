@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2014 Rodrigo Silveira. All rights reserved.
+ * http://www.rodrigo-silveira.com
+ */
 var main = function(){
     var board = new Board(32, 32);
     board.generate();

@@ -4,8 +4,8 @@ var main = function(){
 
     var ctrl = new Controller();
     var points = board.seed();
-    var target = new Player(points.start.x, points.start.y, window.innerWidth / board.width * 0.8, window.innerHeight / board.height * 0.8, '#cc0');
-    var hero = new Player(points.end.x, points.end.y, window.innerWidth / board.width * 0.8, window.innerHeight / board.height * 0.8, '#c00');
+    var target = new Player(points.start.x, points.start.y, window.innerWidth / board.width, window.innerHeight / board.height, '#ff0');
+    var hero = new Player(points.end.x, points.end.y, window.innerWidth / board.width * 0.5, window.innerHeight / board.height * 0.5, '#c00');
 
 
     document.body.addEventListener('keydown', function(e){
@@ -33,22 +33,35 @@ var main = function(){
 
     var update = function(time){
         var delta = time - lastUpdate;
+        var toMove = move * delta;
         lastUpdate = time;
 
-        if (ctrl.keys[Controller.Keys.UP] && board.canMove(hero.x, hero.y - 1, Cell.walls.UP)) {
-            hero.y -= move * delta;
+        if (ctrl.keys[Controller.Keys.UP]) {
+            if (board.canMove(hero, 0, -toMove, Cell.walls.UP, Cell.walls.DOWN)) {
+                hero.y -= toMove;
+            } else {
+                hero.y = parseInt(hero.y + toMove, 10);
+            }
+        } else if (ctrl.keys[Controller.Keys.DOWN]) {
+            if (board.canMove(hero, 0, toMove, Cell.walls.DOWN, Cell.walls.UP)) {
+                hero.y += toMove;
+            } else {
+                hero.y = parseInt(hero.y - toMove, 10);
+            }
         }
 
-        if (ctrl.keys[Controller.Keys.DOWN] && board.canMove(hero.x, hero.y + 1, Cell.walls.DOWN)) {
-            hero.y += move * delta;
-        }
-
-        if (ctrl.keys[Controller.Keys.LEFT] && board.canMove(hero.x - 1, hero.y, Cell.walls.LEFT)) {
-            hero.x -= move * delta;
-        }
-
-        if (ctrl.keys[Controller.Keys.RIGHT] && board.canMove(hero.x + 1, hero.y, Cell.walls.RIGHT)) {
-            hero.x += move * delta;
+        if (ctrl.keys[Controller.Keys.LEFT]) {
+            if (board.canMove(hero, -toMove, 0, Cell.walls.LEFT, Cell.walls.RIGHT)) {
+                hero.x -= toMove;
+            } else {
+                hero.x = parseInt(hero.x + toMove, 10);
+            }
+        } else if (ctrl.keys[Controller.Keys.RIGHT]) {
+            if (board.canMove(hero, toMove, 0, Cell.walls.RIGHT, Cell.walls.LEFT)) {
+                hero.x += toMove;
+            } else {
+                hero.x = parseInt(hero.x - toMove, 10);
+            }
         }
     };
 

@@ -211,23 +211,25 @@ Board.prototype.getNeighbors = function(x, y) {
 
 /**
  *
- * @param {number} x
- * @param {number} y
+ * @param {Player} hero
+ * @param {number} dir
+ * @param {number} back
  * @return bool
  */
-Board.prototype.canMove = function (x, y, dir) {
-    x = parseInt(x, 10);
-    y = parseInt(y, 10);
+Board.prototype.canMove = function(hero, dx, dy, dir, back) {
+    var x = parseInt(hero.x + dx, 10);
+    var y = parseInt(hero.y + dy, 10);
 
-    if (x < 0 || y < 0) {
+    if (hero.x < -Math.abs(dx) || hero.y < -Math.abs(dy)) {
         return false;
     }
 
-    if (x > this.width - 1 || y > this.height - 1) {
+    if (hero.x + 1 > this.width + Math.abs(dx) || hero.y + 1 > this.height + Math.abs(dy)) {
         return false;
     }
 
-    var cell = this.getCell(x, y);
+    var cell = this.getCell(x, y) || Cell.dummy;
+
     if (cell.walls & dir) {
 //        return false;
     }
@@ -293,6 +295,9 @@ BoardRenderer.prototype.render = function(time) {
 
         this.ctx.fillStyle = this.colors.bg;
         this.ctx.fillRect(0, 0, this.width, this.height);
+
+        this.ctx.fillStyle = this.target.color;
+        this.ctx.fillRect(this.target.x * this.cellWidth, this.target.y * this.cellHeight, this.target.width, this.target.height);
         this.ctx.fillStyle = this.colors.wall;
 
         for (var i = 0, len = cells.length; i < len; i++) {
@@ -313,15 +318,11 @@ BoardRenderer.prototype.render = function(time) {
             if (cells[i].walls & Cell.walls.DOWN) {
                 this.ctx.fillRect(pos.x * this.cellWidth, (pos.y + 1) * this.cellHeight - this.wallThickness, this.cellWidth, this.wallThickness);
             }
-
-
-            this.ctx.fillStyle = this.target.color;
-            this.ctx.fillRect(this.target.x * this.cellWidth + (this.cellWidth * 0.1), this.target.y * this.cellHeight + (this.cellHeight * 0.1), this.target.width, this.target.height);
-
-            this.ctx.fillStyle = this.hero.color;
-            this.ctx.fillRect(this.hero.x * this.cellWidth + (this.cellWidth * 0.1), this.hero.y * this.cellHeight + (this.cellHeight * 0.1), this.hero.width, this.hero.height);
-            this.ctx.fillStyle = this.colors.wall;
         }
+
+        this.ctx.fillStyle = this.hero.color;
+        this.ctx.fillRect(this.hero.x * this.cellWidth + (this.cellWidth * 0.25), this.hero.y * this.cellHeight + (this.cellHeight * 0.25), this.hero.width, this.hero.height);
+        this.ctx.fillStyle = this.colors.wall;
 
         this.lastTime = now;
     }

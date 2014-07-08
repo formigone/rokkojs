@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<!--
+Copyright 2014 Rodrigo Silveira. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Closure Unit Tests - viewport</title>
+    <script src="/lib/closure-library/closure/goog/base.js"></script>
+    <script src="/rokko/src/map/Map.js"></script>
+    <script>
+        goog.require("goog.testing.jsunit");
+    </script>
+</head>
+<body>
+<script>
+
+    var makeMockMap = function(tileCols, tileRows, tileWidth, tileHeight) {
+        tileRows = tileRows || 10;
+        tileCols = tileCols || 10;
+        tileWidth = tileWidth || 32;
+        tileHeight = tileHeight || 32;
+
+        return {
+            cols: tileCols,
+            rows: tileRows,
+            tileWidth: tileWidth,
+            tileHeight: tileHeight
+        };
+    };
+
+    function test_CalculatesMapOffset() {
+        var mockMap = makeMockMap(10, 10, 32, 32);
+        var camera = new Viewport(mockMap, 100, 100, 0, 0);
+console.log(camera);
+        assertEquals("Map offset X should be 0", 0, camera.mapCol);
+        assertEquals("Map offset Y should be 0", 0, camera.mapRow);
+
+
+        camera.scrollBy(10, 10);
+
+        assertEquals("Camera offset X should be 10", 10, camera.x);
+        assertEquals("Camera offset Y should be 10", 10, camera.y);
+        assertEquals("Map offset X should be 0", 0, camera.mapCol);
+        assertEquals("Map offset Y should be 0", 0, camera.mapRow);
+
+
+        camera.scrollTo(0, 0);
+        camera.scrollBy(32, 32);
+
+        assertEquals("Camera offset X should be 32", 32, camera.x);
+        assertEquals("Camera offset Y should be 32", 32, camera.y);
+        assertEquals("Map offset X should be 1", 1, camera.mapCol);
+        assertEquals("Map offset Y should be 1", 1, camera.mapRow);
+
+
+        camera.scrollTo(0, 0);
+        camera.scrollBy(33, 33);
+
+        assertEquals("Camera offset X should be 33", 33, camera.x);
+        assertEquals("Camera offset Y should be 33", 33, camera.y);
+        assertEquals("Map offset X should be 1", 1, camera.mapCol);
+        assertEquals("Map offset Y should be 1", 1, camera.mapRow);
+
+
+        // Only scroll until viewport hits map.width
+        camera.scrollTo(0, 0);
+        camera.scrollBy(camera.map.cols * camera.map.tileWidth, 0);
+
+        // map.cols = 10 => width_px = 10 * 32 = 320
+        // camera.width[_px] = 100
+        // camera.x should be 320 - 100 = 220
+        assertEquals("Camera offset X should be 220", 220, camera.x);
+
+        // camera.x(220) / maps.tileWidth(32) => 220 / 32 = 6.9
+        assertEquals("Map offset X should be 6", 6, camera.mapCol);
+    }
+</script>
+</body>
+</html>

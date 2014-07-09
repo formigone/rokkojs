@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<!--
+Copyright 2013 Rodrigo Silveira. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Closure Unit Tests - goog.color.alpha</title>
+    <script src="/lib/closure-library/closure/goog/base.js"></script>
+    <script src="/rokko/src/rokko/deps.js"></script>
+    <script>
+        goog.require("rokko.entities.Entity");
+        goog.require("rokko.managers.EntityManager");
+        goog.require("goog.testing.jsunit");
+    </script>
+</head>
+<body>
+<script>
+
+    function testStuffLoading() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        assertTrue("Entity loaded", goog.isObject(ent));
+        assertTrue("EntityManager loaded", goog.isObject(man));
+    }
+
+    function testRemovingNothing() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        assertFalse("Removing from non-group", man.remove(ent, ""));
+        assertFalse("Removing from group", man.remove(ent, "some-group"));
+    }
+
+    function testRemovingStuff() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        man.add(ent, "hero");
+
+        assertTrue("Removing from non-group", man.remove(ent, "hero"));
+
+        var total = man.getGroup("hero");
+        assertTrue("Should have zero entities in group", total == 0);
+
+        man.add(ent, "hero");
+        total = man.getGroup("villain");
+        assertTrue("Should have zero entities in this group, too", total == 0);
+    }
+
+    function testAddingStuff() {
+        var ent = new rokko.entities.Entity();
+        var man = new rokko.managers.EntityManager();
+
+        man.add(ent, "hero");
+
+        assertTrue("Removing from non-group", man.remove(ent, "hero"));
+
+        var total = man.getGroup("hero");
+        assertTrue("Should have zero entities in group", total == 0);
+
+        man.add(ent, "hero");
+        total = man.getGroup("villain");
+        assertTrue("Should have zero entities in this group, too", total == 0);
+    }
+</script>
+</body>
+</html>

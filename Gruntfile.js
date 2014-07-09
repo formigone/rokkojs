@@ -6,19 +6,21 @@ module.exports = function (grunt) {
   options: {
     closureLibraryPath: '/usr/local/google-closure/closure-library',
     depswriter: '/usr/local/google-closure/closure-library/closure/bin/build/depswriter.py',
-    root: ['src'],
+    root: ['app/js/app'],
   },
   def: {
-    dest: 'src/deps.js'
+    dest: 'app/js/app/deps.js'
   }
 },
     closureCompiler: {
       options: {
         compilerFile: '/usr/local/google-closure/compiler.jar'
       },
+      src: 'app/js/app/main.js',
+      dest: 'dist/js/app.js',
       adv: {
-        src: 'in.js',
-        dest: 'out.js',
+        src: 'app/js/app/main.js',
+        dest: 'dist/js/app.js',
         options: {
           compilerOpts: {
             compilation_level: 'ADVANCED_OPTIMIZATIONS'
@@ -26,9 +28,9 @@ module.exports = function (grunt) {
         }
       },
       white: {
-        src: 'in.js',
-        dest: 'out.js',
-        options: {
+        src: 'app/js/app/main.js',
+        dest: 'dist/js/app.js',
+         options: {
           compilerOpts: {
             compilation_level: 'WHITESPACE_ONLY'
           }

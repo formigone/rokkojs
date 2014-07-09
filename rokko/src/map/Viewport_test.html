@@ -32,10 +32,10 @@ See the COPYING file for details.
         };
     };
 
-    function test_CalculatesMapOffset() {
+    function test_ScrollCamera_KeepsTrackOfMapOffsets() {
         var mockMap = makeMockMap(10, 10, 32, 32);
         var camera = new Viewport(mockMap, 100, 100, 0, 0);
-console.log(camera);
+
         assertEquals("Map offset X should be 0", 0, camera.mapCol);
         assertEquals("Map offset Y should be 0", 0, camera.mapRow);
 
@@ -64,7 +64,11 @@ console.log(camera);
         assertEquals("Camera offset Y should be 33", 33, camera.y);
         assertEquals("Map offset X should be 1", 1, camera.mapCol);
         assertEquals("Map offset Y should be 1", 1, camera.mapRow);
+    }
 
+    function test_ScrollCamera_ViewportStaysWithinMap() {
+        var mockMap = makeMockMap(10, 10, 32, 32);
+        var camera = new Viewport(mockMap, 100, 100, 0, 0);
 
         // Only scroll until viewport hits map.width
         camera.scrollTo(0, 0);
@@ -77,6 +81,17 @@ console.log(camera);
 
         // camera.x(220) / maps.tileWidth(32) => 220 / 32 = 6.9
         assertEquals("Map offset X should be 6", 6, camera.mapCol);
+    }
+
+    function test_MapSmallerThanViewport_MakesViewportSameSizeAsMap() {
+        // map width_px = 20; height_px = 20
+        var mockMap = makeMockMap(10, 10, 2, 2);
+
+        // viewport width_px = 100; height_px = 100
+        var camera = new Viewport(mockMap, 100, 100, 0, 0);
+
+        assertEquals("Camera offset X should be 0", 0, camera.x);
+        assertEquals("Map offset X should be 0", 0, camera.mapCol);
     }
 </script>
 </body>

@@ -23,7 +23,7 @@ Map.TileType = {
     SOLID: 1
 };
 
-Map.prototype.init = function(){
+Map.prototype.init = function() {
     var obj = {};
     for (var i = 0, len = this.sheets.length; i < len; i++) {
         obj[this.sheets[i].name] = this.sheets[i];
@@ -55,20 +55,28 @@ var Viewport = function(map, width, height, x, y) {
     this.init();
 };
 
-Viewport.prototype.init = function(){
+Viewport.prototype.init = function() {
     this.maxX = this.map.cols * this.map.tileWidth - this.width;
     this.maxY = this.map.rows * this.map.tileHeight - this.height;
+
+    if (this.maxX < 0) {
+        this.maxX = this.map.cols * this.map.tileWidth;
+    }
+
+    if (this.maxY < 0) {
+        this.maxY = this.map.rows * this.map.tileHeight;
+    }
 
     this.constrainScroll();
     this.calculateMapOffset();
 };
 
-Viewport.prototype.calculateMapOffset = function(){
+Viewport.prototype.calculateMapOffset = function() {
     this.mapCol = parseInt(this.x / this.map.tileWidth, 10);
     this.mapRow = parseInt(this.y / this.map.tileHeight, 10);
 };
 
-Viewport.prototype.constrainScroll = function(){
+Viewport.prototype.constrainScroll = function() {
     if (this.x > this.maxX) {
         this.x = this.maxX;
     } else if (this.x < 0) {
@@ -113,6 +121,15 @@ var Tile = function(sheet, cell, type) {
     this.sheet = sheet;
     this.cell = cell;
     this.type = type;
+
+    this.x = 0;
+    this.y = 0;
+
+    this.init();
+};
+
+Tile.prototype.init = function(){
+    // TODO: calculate (x, y) based on cell value
 };
 
 
@@ -130,6 +147,17 @@ var MapRenderer = function(viewport) {
     this.ctx = this.canvas.getContext('2d');
 };
 
+/**
+ *
+ * @param {number} x
+ * @param {number} y
+ *
+ * @return {Tile}
+ */
+MapRenderer.prototype.getTile = function(x, y) {
+    return this.tiles[y * this.map.cols + x];
+};
+
 MapRenderer.prototype.bindTo = function(container) {
     container.appendChild(this.canvas);
 };
@@ -138,15 +166,13 @@ MapRenderer.prototype.render = function(time) {
     this.ctx.clearRect(0, 0, this.width, this.height);
     var tileIndex = 0;
     var tile;
-    var x = 0;
-    var y = 0;
+    var w = this.map.tileWidth;
+    var h = this.map.tileHeight;
 
     // TODO: calculate total tiles to render based on viewport width (in px)
     for (var i = 0, len = this.tiles.length; i < len; i++) {
-        // TODO: grab correct tile
-        tileIndex = parseInt(this.viewport.x, 10) * i;
-        tile = this.tiles[tileIndex];
-console.log(tileIndex, i);
-        this.ctx.drawImage(tile.sheet.img, i * this.map.tileWidth, 0, i * this.map.tileWidth, this.map.tileHeight);
+        tile = this.getTile(this.viewport.mapCol, this.viewport.mapRow);
+        // TODO: get cell's sub (x, y):[w,h]
+        this.ctx.drawImage(tile.sheet.img, i * this.map.tileWidth, i * this.viewport.mapRow, w, h);
     }
 };

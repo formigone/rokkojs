@@ -37,13 +37,21 @@ module.exports = function (grunt) {
           }
         }
       }
-    }
+    },
+qunit:{
+  all: ['app/js/app/**/*_test.html']
+},
+connect:{ server: { options: { base: './app', port: 0, hostname: 'localhost', keepalive: true }  } }
   });
 
   grunt.loadNpmTasks('grunt-closure-tools');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
 
   grunt.registerTask('default', ['closureCompiler:white']);
   grunt.registerTask('comp', ['closureCompiler:adv']);
   grunt.registerTask('deps', ['closureDepsWriter']);
+  grunt.registerTask('travis', ['qunit']);
+  grunt.registerTask('server', ['connect']);
 };
 

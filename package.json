@@ -4,6 +4,9 @@
   "description": "JavaScript game engine written using Google Closure Tools",
   "author": "Rodrigo Silveira",
   "license": "ISC",
+  "scripts": {
+    "test": "grunt travis --verbose"
+  },
   "devDependencies": {
     "grunt-closure-tools": "~0.9.7",
     "grunt": "~0.4.5",

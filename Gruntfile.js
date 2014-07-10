@@ -6,8 +6,7 @@ module.exports = function (grunt) {
   options: {
     closureLibraryPath: 'app/lib/closure-library',
     depswriter: 'app/lib/closure-library/closure/bin/build/depswriter.py',
-    root: ['app/js/app'],
-    root_with_prefix: '"app ../../../../../"'
+    root_with_prefix: '"app ../../../../"'
   },
   def: {
     dest: 'app/js/app/deps.js'
@@ -41,7 +40,16 @@ module.exports = function (grunt) {
 qunit:{
   all: ['app/js/app/**/*_test.html']
 },
-connect:{ server: { options: { base: './app', port: 0, hostname: 'localhost', keepalive: true }  } }
+connect:{ 
+  server: {
+    options: { base: './app', port: 0, hostname: 'localhost', keepalive: true }
+  },
+  dist: {
+      options: {
+        base: './dist', port: 0, hostname: 'localhost', keepalive: true 
+      }
+  }
+}
   });
 
 
@@ -54,5 +62,6 @@ connect:{ server: { options: { base: './app', port: 0, hostname: 'localhost', ke
   grunt.registerTask('deps', ['closureDepsWriter']);
   grunt.registerTask('travis', ['qunit']);
   grunt.registerTask('server', ['connect']);
+  grunt.registerTask('prod', ['connect:dist']);
 };
 

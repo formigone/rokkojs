@@ -1,5 +1,3 @@
-lib
-out
 .idea
-app.comp.js
-app.comp.js.map
+node_modules
+

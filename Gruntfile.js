@@ -4,8 +4,8 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     closureDepsWriter: {
   options: {
-    closureLibraryPath: '/usr/local/google-closure/closure-library',
-    depswriter: '/usr/local/google-closure/closure-library/closure/bin/build/depswriter.py',
+    closureLibraryPath: 'app/lib/closure-library',
+    depswriter: 'app/lib/closure-library/closure/bin/build/depswriter.py',
     root: ['app/js/app'],
     root_with_prefix: '"app ../../../../../"'
   },
@@ -15,7 +15,7 @@ module.exports = function (grunt) {
 },
     closureCompiler: {
       options: {
-        compilerFile: '/usr/local/google-closure/compiler.jar'
+        compilerFile: 'lib/google-closure/compiler.jar'
       },
       src: 'app/js/app/main.js',
       dest: 'dist/js/app.js',
@@ -43,6 +43,7 @@ qunit:{
 },
 connect:{ server: { options: { base: './app', port: 0, hostname: 'localhost', keepalive: true }  } }
   });
+
 
   grunt.loadNpmTasks('grunt-closure-tools');
   grunt.loadNpmTasks('grunt-contrib-connect');

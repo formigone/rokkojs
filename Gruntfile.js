@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     closureLibraryPath: '/usr/local/google-closure/closure-library',
     depswriter: '/usr/local/google-closure/closure-library/closure/bin/build/depswriter.py',
     root: ['app/js/app'],
+    root_with_prefix: '"app ../../../../../"'
   },
   def: {
     dest: 'app/js/app/deps.js'

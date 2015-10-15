@@ -4,7 +4,7 @@
  */
 var main = function() {
     var sheet = [
-        new Sheet('Zelda', '/img/tiles/zelda-02.png', 1, 10, 10, 16, 16)
+        new Sheet('Zelda', 'img/tiles/zelda-02.png', 1, 10, 10, 16, 16)
     ];
     var tiles = [
         new Tile(sheet[0], 0, Map.TileType.SOLID),

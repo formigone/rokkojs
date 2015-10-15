@@ -146,7 +146,6 @@ MapRenderer.prototype.render = function(time) {
         // TODO: grab correct tile
         tileIndex = parseInt(this.viewport.x, 10) * i;
         tile = this.tiles[tileIndex];
-console.log(tileIndex, i);
         this.ctx.drawImage(tile.sheet.img, i * this.map.tileWidth, 0, i * this.map.tileWidth, this.map.tileHeight);
     }
 };

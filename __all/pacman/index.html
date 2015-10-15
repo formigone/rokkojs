@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+    <title>Pacman</title>
+</head>
+<body>
+
+<script>
+    var Renderer = function(width, height) {
+        this.width = width;
+        this.height = height;
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.ctx = this.canvas.getContext('2d');
+    };
+
+    Renderer.prototype.bindTo = function(element) {
+        element.appendChild(this.canvas);
+    };
+
+    var Map = function(data, hero, options, renderer) {
+        this.data = data;
+        this.hero = hero;
+        this.renderer = renderer;
+
+        this.cellWidth = options.cellWidth || 16;
+        this.cellHeight = options.cellHeight || 16;
+        this.style = options.style || {
+            '#': '#0c0',
+            '@': '#ff0',
+            '.': '#aaa',
+            '+': '#c00',
+            ' ': '#333'
+        };
+
+        this.heroSymbol = '@';
+        this.foodSymbol = '.';
+        this.enemySymbol = '+';
+    };
+
+    Map.prototype.draw = function() {
+        var ctx = this.renderer.ctx;
+        var data = this.data;
+        var style = this.style;
+        ctx.clearRect(0, 0, this.renderer.width, this.renderer.height);
+
+        for (var y = 0, lenY = data.length; y < lenY; y++) {
+            var row = data[y];
+            for (var x = 0, lenX = row.length; x < lenX; x++) {
+                var cell = row[x];
+
+                if (cell === this.foodSymbol || cell === this.enemySymbol) {
+                    ctx.fillStyle = style[' '];
+                    ctx.fillRect(x * this.cellWidth, y * this.cellHeight, this.cellWidth, this.cellHeight);
+
+                    ctx.fillStyle = style[cell];
+                    ctx.fillRect(x * this.cellWidth + this.cellWidth * 0.4, y * this.cellHeight + this.cellHeight * 0.4, this.cellWidth * 0.3, this.cellHeight * 0.3);
+                } else {
+                    ctx.fillStyle = style[cell];
+                    ctx.fillRect(x * this.cellWidth, y * this.cellHeight, this.cellWidth, this.cellHeight);
+                }
+            }
+        }
+
+        var left = this.hero.x * this.cellWidth;
+        var right = left + this.hero.w;
+        var top = this.hero.y * this.cellHeight;
+        var bottom = top + this.hero.h;
+
+        ctx.fillStyle = style[this.heroSymbol];
+        ctx.fillRect(left, top, this.hero.w, this.hero.h);
+
+
+        ctx.fillRect(left, 0, 1, 200);
+        ctx.fillRect(right, 0, 1, 200);
+        ctx.fillRect(0, top, 500, 1);
+        ctx.fillRect(0, bottom, 500, 1);
+    };
+
+    (function main() {
+        var file = 'map-001.txt';
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', file);
+        xhr.onreadystatechange = function(){
+            if (this.readyState === 4 && this.status === 200) {
+                var map = this.responseText.split('\n');
+
+                for (var y = 0, lenY = map.length; y < lenY; y++) {
+                    var row = map[y] = map[y].split('');
+                    for (var x = 0, lenX = row.length; x < lenX; x++) {
+                        var cell = row[x];
+                        if (cell === '@') {
+                            map[y][x] = ' ';
+                            hero.x = x;
+                            hero.y = y;
+                            break;
+                        }
+                    }
+                }
+
+                go(map);
+            }
+        };
+        xhr.send();
+
+        var hero = {x: 0, y: 0, dx: 0.1, dy: 0.1, w: 5, h: 5};
+        var lastTIme = 0;
+        var dt = 0;
+
+        var go = function(mapData) {
+            var map = new Map(mapData, hero, {}, new Renderer(500, 500));
+            var cellWidth = map.cellWidth;
+            var cellHeight = map.cellHeight;
+
+            var update = function(){
+                var data = map.data;
+                var left = Math.floor(hero.x);
+                var right = Math.ceil(left + hero.w);
+                var top = Math.floor(hero.y);
+                var bottom = Math.ceil(top + hero.h);
+
+                if (input[key.LEFT] && data[top][left] !== '#' && data[bottom][left] !== '#') {
+                    hero.x -= hero.dx;
+                }
+
+                if (input[key.RIGHT]) {
+                    hero.x += hero.dx;
+                }
+
+                if (input[key.UP]) {
+                    hero.y -= hero.dy;
+                }
+
+                if (input[key.DOWN]) {
+                    hero.y += hero.dy;
+                }
+            };
+
+            var draw = function(dt){
+                map.draw();
+            };
+
+            var gameLoop = function(now){
+                dt = now - lastTIme;
+                lastTIme = now;
+                if (dt > 1000) {
+                    dt = 1;
+                }
+
+                requestAnimationFrame(gameLoop);
+
+                update();
+                draw(dt);
+            };
+
+
+            map.renderer.bindTo(document.body);
+            gameLoop(0);
+        };
+
+        var key = {
+            UP: 38,
+            DOWN: 40,
+            LEFT: 37,
+            RIGHT: 39
+        };
+
+        var input = {};
+
+        document.addEventListener('keydown', function(e){ input[e.keyCode] = true; });
+        document.addEventListener('keyup', function(e){ input[e.keyCode] = false; });
+    }());
+</script>
+</body>
+</html>
